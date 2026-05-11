@@ -1,0 +1,531 @@
+
+<h2 class="sr-only">NEET 2026 Counselling Intelligence Tool for Arkamita — interactive, step-by-step college selection and probability calculator for Karnataka government medical colleges</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{font-family:var(--font-sans);padding:0.25rem 0 2rem}
+.steps{display:flex;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:1.25rem}
+.step-btn{flex:1;padding:10px 4px;text-align:center;font-size:11px;cursor:pointer;border-right:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);background:transparent;border-top:none;border-bottom:none;border-left:none;font-family:var(--font-sans);transition:background 0.1s}
+.step-btn:last-child{border-right:none}
+.step-btn.active{background:#E6F1FB;color:#185FA5;font-weight:500}
+.step-btn.done{color:#3B6D11}
+.sec{display:none}
+.sec.on{display:block}
+.sec-head{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1rem}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.03em}
+.fi{font-size:13px;height:36px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:0 10px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+.fi:focus{outline:2px solid #378ADD;outline-offset:1px}
+.goal-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.gtag{font-size:12px;padding:5px 11px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);cursor:pointer;background:transparent;font-family:var(--font-sans)}
+.gtag.sel{background:#E6F1FB;color:#185FA5;border-color:#378ADD}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;padding-top:1rem;border-top:0.5px solid var(--color-border-tertiary)}
+.btn-back{background:transparent;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 18px;font-size:13px;cursor:pointer;color:var(--color-text-primary);font-family:var(--font-sans)}
+.btn-back:hover{background:var(--color-background-secondary)}
+.btn-next{background:#185FA5;border:none;border-radius:var(--border-radius-md);padding:9px 18px;font-size:13px;cursor:pointer;color:#fff;font-family:var(--font-sans)}
+.btn-next:hover{background:#0C447C}
+.btn-next:disabled{background:#B5D4F4;cursor:not-allowed}
+.info-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:var(--color-text-secondary);margin-top:10px;line-height:1.6}
+.info-box b{color:var(--color-text-primary);font-weight:500}
+.sl-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sl-lbl{font-size:13px;color:var(--color-text-primary);min-width:180px;flex-shrink:0}
+.sl-val{font-size:13px;font-weight:500;min-width:42px;text-align:right;color:var(--color-text-primary)}
+.sl-pct{font-size:11px;color:var(--color-text-tertiary);min-width:38px}
+.total-row{font-size:12px;color:var(--color-text-secondary);margin-top:4px;padding:8px 0;border-top:0.5px solid var(--color-border-tertiary)}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+.flt-btn{font-size:11px;padding:4px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;cursor:pointer;color:var(--color-text-secondary);font-family:var(--font-sans)}
+.flt-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:#378ADD}
+.cgrid{display:grid;grid-template-columns:1fr;gap:8px}
+.ccard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;transition:border-color 0.15s}
+.ccard.strategic{border:2px solid #378ADD}
+.ccard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.cname{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.cloc{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.badge{font-size:11px;padding:3px 8px;border-radius:var(--border-radius-md);font-weight:500;flex-shrink:0}
+.bd{background:#E6F1FB;color:#185FA5}
+.bs{background:#FAEEDA;color:#854F0B}
+.bst{background:#EAF3DE;color:#3B6D11}
+.bsf{background:#F1EFE8;color:#5F5E5A}
+.prob-section{margin:8px 0}
+.prob-head{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.prob-pct{font-size:12px;font-weight:500}
+.prob-bg{background:var(--color-background-secondary);border-radius:4px;height:9px;overflow:hidden}
+.prob-fill{height:9px;border-radius:4px;width:0;transition:width 1.4s cubic-bezier(0.25,1,0.5,1)}
+.metrics{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.met{font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:4px}
+.met-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ws-box{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)}
+.ws-label{font-size:11px;color:var(--color-text-secondary)}
+.ws-score{font-size:13px;font-weight:500}
+.ws-bar-bg{flex:1;background:var(--color-border-tertiary);border-radius:3px;height:5px}
+.ws-bar{height:5px;border-radius:3px;transition:width 0.8s ease}
+.expand-btn{font-size:11px;color:var(--color-text-secondary);background:none;border:none;cursor:pointer;font-family:var(--font-sans);padding:0;margin-top:6px}
+.expand-btn:hover{color:var(--color-text-primary)}
+.expand-content{display:none;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)}
+.expand-content.open{display:block}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
+.detail-item{font-size:11px}
+.detail-k{color:var(--color-text-secondary)}
+.detail-v{font-weight:500;color:var(--color-text-primary)}
+.strat-note{font-size:12px;color:var(--color-text-secondary);margin-top:8px;line-height:1.5;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)}
+.pref-list{list-style:none}
+.pref-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:6px;background:var(--color-background-primary)}
+.pref-rank{width:24px;height:24px;border-radius:50%;background:#E6F1FB;color:#185FA5;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pref-name{flex:1;font-size:13px;color:var(--color-text-primary)}
+.pref-band{font-size:11px;flex-shrink:0}
+.pref-prob{font-size:11px;color:var(--color-text-secondary);min-width:60px;text-align:right;flex-shrink:0}
+.pref-ctrls{display:flex;gap:4px}
+.pctl{background:none;border:0.5px solid var(--color-border-tertiary);border-radius:4px;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--color-text-secondary);font-family:var(--font-sans)}
+.pctl:hover{background:var(--color-background-secondary)}
+.pctl:disabled{opacity:0.3;cursor:default}
+.ai-box{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;min-height:120px;font-size:13px;color:var(--color-text-primary);line-height:1.8;white-space:pre-wrap;display:none}
+.summary-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.s-chip{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:6px 12px;font-size:12px;color:var(--color-text-secondary)}
+.s-chip b{color:var(--color-text-primary);font-weight:500}
+</style>
+
+<div class="app">
+<div class="steps">
+  <button class="step-btn active" id="s0" onclick="go(0)">① Profile</button>
+  <button class="step-btn" id="s1" onclick="go(1)">② Priorities</button>
+  <button class="step-btn" id="s2" onclick="go(2)">③ Reveal</button>
+  <button class="step-btn" id="s3" onclick="go(3)">④ Build list</button>
+  <button class="step-btn" id="s4" onclick="go(4)">⑤ AI report</button>
+</div>
+
+<div class="sec on" id="sec0">
+  <div class="sec-head">① Confirm Arkamita's profile</div>
+  <div class="form-row">
+    <div class="fg"><span class="fl">Candidate name</span><input class="fi" id="f-name" value="Arkamita"></div>
+    <div class="fg"><span class="fl">NEET 2026 score</span><input class="fi" id="f-score" type="number" min="1" max="720" value="682"></div>
+    <div class="fg"><span class="fl">Predicted AIR</span><input class="fi" id="f-air" value="3,601 – 3,800"></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><span class="fl">Category</span>
+      <select class="fi" id="f-cat">
+        <option value="UR" selected>General (UR)</option>
+        <option value="OBC">OBC</option>
+        <option value="SC">SC</option>
+        <option value="ST">ST</option>
+        <option value="EWS">EWS</option>
+      </select>
+    </div>
+    <div class="fg"><span class="fl">Karnataka domicile</span>
+      <select class="fi" id="f-dom">
+        <option value="yes" selected>Yes — KEA 85% state quota eligible</option>
+        <option value="no">No — AIQ only</option>
+      </select>
+    </div>
+    <div class="fg"><span class="fl">Budget</span>
+      <select class="fi" id="f-bud">
+        <option value="govt" selected>Government only (budget critical)</option>
+        <option value="some">Up to ₹15–20L/year</option>
+        <option value="open">Cost not a constraint</option>
+      </select>
+    </div>
+  </div>
+  <div class="fg" style="margin-bottom:1rem">
+    <span class="fl">Long-term goals (select all that apply)</span>
+    <div class="goal-wrap" id="goal-wrap">
+      <button class="gtag sel" data-g="pg">PG / MD / MS in India</button>
+      <button class="gtag sel" data-g="superspec">Super-specialization</button>
+      <button class="gtag sel" data-g="usmle">USMLE / abroad</button>
+      <button class="gtag sel" data-g="research">Research / academia</button>
+      <button class="gtag" data-g="practice">Private practice</button>
+      <button class="gtag" data-g="service">Govt service</button>
+    </div>
+  </div>
+  <div class="fg" style="margin-bottom:0">
+    <span class="fl">Location preference</span>
+    <select class="fi" id="f-loc" style="max-width:320px">
+      <option value="any" selected>Open to all Karnataka</option>
+      <option value="blr">Bengaluru strongly preferred</option>
+      <option value="mys">Mysuru preferred</option>
+      <option value="t2">Tier-2 cities acceptable</option>
+    </select>
+  </div>
+  <div class="info-box" style="margin-top:12px"><b>Karnataka domicile confirmed.</b> KEA 85% state quota probabilities applied throughout — these are significantly higher than AIQ-only estimates. She is also eligible to participate in MCC AIQ counselling simultaneously.</div>
+  <div class="nav-row">
+    <span style="font-size:12px;color:var(--color-text-secondary)">Step 1 of 5</span>
+    <button class="btn-next" onclick="go(1)">Next: set priorities →</button>
+  </div>
+</div>
+
+<div class="sec" id="sec1">
+  <div class="sec-head">② Adjust priority weights — move sliders to reflect what matters most</div>
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem">Each slider sets a relative importance. Weights are normalised to 100% automatically. Probabilities update live when you reveal results.</div>
+  <div id="sl-container"></div>
+  <div class="total-row" id="total-row"></div>
+  <div class="info-box"><b>Tip for this profile:</b> With PG + USMLE + research goals, keep PG ecosystem and clinical exposure weights highest. Bond freedom is critical if she wants flexibility to pursue USMLE after MBBS — government colleges with no rural bond obligation score higher here.</div>
+  <div class="nav-row">
+    <button class="btn-back" onclick="go(0)">← Back</button>
+    <button class="btn-next" onclick="go(2);revealAll()">Reveal probabilities →</button>
+  </div>
+</div>
+
+<div class="sec" id="sec2">
+  <div class="sec-head">③ College probability matrix — calibrated for Arkamita's exact profile</div>
+  <div class="summary-chips" id="sum-chips"></div>
+  <div class="filter-row">
+    <span style="font-size:12px;color:var(--color-text-secondary)">Filter:</span>
+    <button class="flt-btn active" onclick="flt('all',this)">All colleges</button>
+    <button class="flt-btn" onclick="flt('Dream',this)">Dream</button>
+    <button class="flt-btn" onclick="flt('Stretch',this)">Stretch</button>
+    <button class="flt-btn" onclick="flt('Strong',this)">Strong</button>
+    <button class="flt-btn" onclick="flt('Safe',this)">Safe</button>
+  </div>
+  <div class="cgrid" id="cgrid"></div>
+  <div class="nav-row">
+    <button class="btn-back" onclick="go(1)">← Back</button>
+    <button class="btn-next" onclick="go(3);buildList()">Build my preference list →</button>
+  </div>
+</div>
+
+<div class="sec" id="sec3">
+  <div class="sec-head">④ Counselling preference list — your KEA / MCC form order</div>
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem">Use ↑ ↓ to reorder. The counselling algorithm honours your true preference — always put dream colleges first. Remove colleges you genuinely do not want.</div>
+  <ul class="pref-list" id="pref-ul"></ul>
+  <div class="info-box" style="margin-top:10px"><b>Critical rule:</b> Never order by probability. If BMCRI is allotted and you don't want it, you lose everything below. Only list colleges you will genuinely accept at each position.</div>
+  <div class="nav-row">
+    <button class="btn-back" onclick="go(2)">← Back</button>
+    <button class="btn-next" onclick="go(4)">Get AI strategic report →</button>
+  </div>
+</div>
+
+<div class="sec" id="sec4">
+  <div class="sec-head">⑤ AI strategic counselling report</div>
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem">Generates a personalised analysis of Arkamita's top choices, strategic risks, and counselling tactics — powered by Claude AI.</div>
+  <div id="ai-status" style="font-size:13px;color:var(--color-text-secondary);margin-bottom:10px;display:none"></div>
+  <div class="ai-box" id="ai-box"></div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px">
+    <button class="btn-next" id="gen-btn" onclick="generateReport()">⚡ Generate strategic report</button>
+    <span style="font-size:12px;color:var(--color-text-secondary)">Powered by Claude AI · ~15 seconds</span>
+  </div>
+  <div class="nav-row">
+    <button class="btn-back" onclick="go(3)">← Back</button>
+    <button class="btn-back" onclick="window.print ? window.print() : null">🖨 Print / save</button>
+  </div>
+</div>
+</div>
+
+<script>
+const weights = { pg:20, clinical:18, probability:15, research:12, academic:10, wellbeing:8, safety:7, bond:5, city:5 };
+const wLabels = { pg:'PG ecosystem', clinical:'Clinical exposure', probability:'Admission probability', research:'Research culture', academic:'Academic rigor', wellbeing:'Wellbeing / culture', safety:'Safety & hostel', bond:'Bond freedom', city:'City ecosystem' };
+
+const colleges = [
+  { id:'bmcri', name:'BMCRI, Bangalore', loc:'Bengaluru', band:'Dream', prob:27, probR:'22–32%',
+    bond:'Yes — rural posting', closingAIR:'~1,800–2,800 (state quota est.)',
+    strat:'Highest clinical load in Karnataka. Elite peer group. Top PG and super-specialization output. Fill first regardless of probability — you cannot get a seat you did not list.',
+    raw:{ pg:9, clinical:10, probability:2, research:7, academic:9, wellbeing:5, safety:7, bond:6, city:10 } },
+  { id:'mmcri', name:'MMCRI, Mysore', loc:'Mysuru', band:'Stretch', prob:50, probR:'44–56%',
+    bond:'Yes — rural posting', closingAIR:'~2,500–4,500 (state quota est.)',
+    strat:'Karnataka\'s second strongest government institution historically. Strong PG culture and clinical load. More manageable environment than BMCRI. Realistic in Round 2 and mop-up for her rank.',
+    raw:{ pg:8, clinical:8, probability:4, research:7, academic:8, wellbeing:7, safety:8, bond:6, city:7 } },
+  { id:'esic', name:'ESIC, Bangalore', loc:'Bengaluru', band:'Stretch', prob:60, probR:'53–67%',
+    bond:'None — central govt, no rural bond', closingAIR:'~3,000–5,500 (est.)',
+    strat:'Strategic sweet spot for a USMLE + research profile. Central govt hospital means zero rural bond obligation. Bengaluru location gives access to USMLE coaching, national networks, and hospital exposure. Growing research infrastructure.',
+    raw:{ pg:6, clinical:7, probability:6, research:6, academic:7, wellbeing:8, safety:8, bond:9, city:9 } },
+  { id:'kims', name:'KIMS, Hubballi', loc:'Hubballi', band:'Strong', prob:66, probR:'60–72%',
+    bond:'Yes — rural posting', closingAIR:'~4,000–7,000 (est.)',
+    strat:'One of the better-resourced government medical colleges outside Bengaluru. Strong clinical load, decent PG culture. Good strategic pick if Bengaluru colleges don\'t materialise.',
+    raw:{ pg:7, clinical:8, probability:6, research:5, academic:7, wellbeing:7, safety:7, bond:6, city:6 } },
+  { id:'jjm', name:'JJM MC, Davangere', loc:'Davangere', band:'Strong', prob:72, probR:'66–78%',
+    bond:'Yes — rural posting', closingAIR:'~5,000–9,000 (est.)',
+    strat:'Established central Karnataka government college. Good patient flow and reasonable clinical exposure. Strong enough to build a PG foundation from.',
+    raw:{ pg:6, clinical:7, probability:7, research:4, academic:6, wellbeing:7, safety:7, bond:7, city:5 } },
+  { id:'bims', name:'BIMS, Belagavi', loc:'Belagavi', band:'Strong', prob:70, probR:'63–76%',
+    bond:'Yes — rural posting', closingAIR:'~5,000–9,000 (est.)',
+    strat:'Established institution with good clinical exposure. Border location offers unique patient profile. Viable strategic pick.',
+    raw:{ pg:6, clinical:7, probability:7, research:4, academic:6, wellbeing:7, safety:6, bond:6, city:5 } },
+  { id:'sims', name:'SIMS, Shimoga', loc:'Shivamogga', band:'Strong', prob:82, probR:'76–86%',
+    bond:'Yes — rural posting', closingAIR:'~7,000–12,000 (est.)',
+    strat:'Good wellbeing reputation. Manageable academic environment. Consistent patient load. Less burnout than metro institutions — allows strong NEET-PG focused study. Underestimated institution.',
+    raw:{ pg:5, clinical:6, probability:8, research:4, academic:6, wellbeing:8, safety:7, bond:7, city:5 } },
+  { id:'vims', name:'VIMS, Ballari', loc:'Ballari', band:'Safe', prob:85, probR:'80–90%',
+    bond:'Yes — rural posting', closingAIR:'~8,000–14,000 (est.)',
+    strat:'Higher clinical exposure than its tier suggests due to large patient catchment. Safe pick with reasonable clinical training. Include in mid-list.',
+    raw:{ pg:5, clinical:7, probability:8, research:3, academic:5, wellbeing:6, safety:6, bond:6, city:4 } },
+  { id:'hassan', name:'Hassan IMC', loc:'Hassan', band:'Safe', prob:90, probR:'85–93%',
+    bond:'Yes — rural posting', closingAIR:'~10,000–18,000 (est.)',
+    strat:'Near-certain allotment. Stable academic environment. Good wellbeing scores. Place in safe tier — don\'t anchor your strategy here but ensure it\'s listed.',
+    raw:{ pg:4, clinical:5, probability:9, research:3, academic:5, wellbeing:8, safety:7, bond:6, city:4 } },
+  { id:'mandya', name:'Mandya IMC', loc:'Mandya', band:'Safe', prob:90, probR:'85–93%',
+    bond:'Yes — rural posting', closingAIR:'~10,000–18,000 (est.)',
+    strat:'Proximity to Bengaluru is a practical advantage. Manageable environment. Strong wellbeing. Place as a reliable safety net.',
+    raw:{ pg:4, clinical:5, probability:9, research:3, academic:5, wellbeing:8, safety:7, bond:6, city:4 } },
+  { id:'kodagu', name:'Kodagu IMC', loc:'Madikeri', band:'Safe', prob:92, probR:'88–95%',
+    bond:'Yes — rural posting', closingAIR:'~12,000–20,000 (est.)',
+    strat:'Pleasant environment, lower pressure. Include as backup. Clinical exposure is limited — not ideal for a research/USMLE profile as a primary choice.',
+    raw:{ pg:3, clinical:4, probability:9, research:2, academic:5, wellbeing:9, safety:8, bond:6, city:3 } },
+  { id:'raichur', name:'Raichur IMC', loc:'Raichur', band:'Safe', prob:93, probR:'88–96%',
+    bond:'Yes — rural posting', closingAIR:'~12,000–20,000 (est.)',
+    strat:'Last resort. Ensure no seat goes unfilled. Remote location limits ecosystem. List at the bottom of your preference sheet.',
+    raw:{ pg:3, clinical:4, probability:9, research:2, academic:4, wellbeing:6, safety:6, bond:6, city:3 } },
+];
+
+let prefOrder = colleges.map(c => c.id);
+let currentStep = 0;
+let revealed = false;
+
+function go(n) {
+  document.querySelectorAll('.sec').forEach((s,i) => { s.classList.toggle('on', i===n); });
+  document.querySelectorAll('.step-btn').forEach((b,i) => {
+    b.classList.remove('active','done');
+    if(i===n) b.classList.add('active');
+    else if(i<n) b.classList.add('done');
+  });
+  currentStep = n;
+}
+
+document.querySelectorAll('.gtag').forEach(btn => {
+  btn.addEventListener('click', () => btn.classList.toggle('sel'));
+});
+
+function buildSliders() {
+  const c = document.getElementById('sl-container');
+  c.innerHTML = Object.keys(weights).map(k => `
+    <div class="sl-row">
+      <span class="sl-lbl">${wLabels[k]}</span>
+      <input type="range" min="0" max="30" step="1" value="${weights[k]}" id="sl-${k}" style="flex:1" oninput="updateWeight('${k}',this.value)">
+      <span class="sl-val" id="sv-${k}">${weights[k]}</span>
+      <span class="sl-pct" id="sp-${k}">${weights[k]}%</span>
+    </div>`).join('');
+  updateTotalDisplay();
+}
+
+function updateWeight(k, v) {
+  weights[k] = parseInt(v);
+  document.getElementById('sv-'+k).textContent = v;
+  updateTotalDisplay();
+  if(revealed) renderGrid();
+}
+
+function updateTotalDisplay() {
+  const total = Object.values(weights).reduce((a,b)=>a+b,0);
+  const norm = Object.keys(weights).map(k => `${wLabels[k]}: ${(weights[k]/total*100).toFixed(0)}%`).join(' · ');
+  const r = document.getElementById('total-row');
+  if(r) r.textContent = `Normalised: ${norm}`;
+  Object.keys(weights).forEach(k => {
+    const sp = document.getElementById('sp-'+k);
+    if(sp) sp.textContent = `${(weights[k]/total*100).toFixed(0)}%`;
+  });
+}
+
+function calcScore(c) {
+  const total = Object.values(weights).reduce((a,b)=>a+b,0);
+  return Object.keys(weights).reduce((sum,k) => sum + (c.raw[k]||0) * weights[k]/total, 0);
+}
+
+function probColor(p) {
+  if(p>=75) return '#639922';
+  if(p>=50) return '#BA7517';
+  return '#D85A30';
+}
+
+function bandClass(b) {
+  if(b==='Dream') return 'bd';
+  if(b==='Stretch') return 'bs';
+  if(b==='Strong') return 'bst';
+  return 'bsf';
+}
+
+function renderGrid(bandFilter) {
+  const f = bandFilter || 'all';
+  const shown = f==='all' ? colleges : colleges.filter(c=>c.band===f);
+  const maxScore = Math.max(...colleges.map(c=>calcScore(c)));
+  const g = document.getElementById('cgrid');
+  g.innerHTML = shown.map(c => {
+    const sc = calcScore(c);
+    const pct = (sc/maxScore*100).toFixed(0);
+    const isStrat = c.id==='esic';
+    return `<div class="ccard${isStrat?' strategic':''}" id="card-${c.id}">
+      <div class="ccard-top">
+        <div>
+          <div class="cname">${c.name}${isStrat?' <span style="font-size:11px;color:#185FA5;background:#E6F1FB;padding:2px 6px;border-radius:4px;margin-left:4px">strategic pick</span>':''}</div>
+          <div class="cloc"><i class="ti ti-map-pin" aria-hidden="true" style="font-size:12px;margin-right:2px"></i>${c.loc} · ${c.bond}</div>
+        </div>
+        <span class="badge ${bandClass(c.band)}">${c.band}</span>
+      </div>
+      <div class="prob-section">
+        <div class="prob-head"><span>Admission probability (KEA state quota)</span><span class="prob-pct" style="color:${probColor(c.prob)}">${c.probR}</span></div>
+        <div class="prob-bg"><div class="prob-fill" id="pf-${c.id}" style="background:${probColor(c.prob)}"></div></div>
+      </div>
+      <div class="ws-box">
+        <span class="ws-label">Weighted score</span>
+        <div class="ws-bar-bg"><div class="ws-bar" id="wb-${c.id}" style="background:${sc>=6.5?'#639922':sc>=5.5?'#BA7517':'#888780'};width:${pct}%"></div></div>
+        <span class="ws-score" style="color:${sc>=6.5?'#3B6D11':sc>=5.5?'#854F0B':'#5F5E5A'}">${sc.toFixed(2)}/10</span>
+      </div>
+      <div class="metrics">
+        <span class="met"><span class="met-dot" style="background:#378ADD"></span>PG ${c.raw.pg}/10</span>
+        <span class="met"><span class="met-dot" style="background:#1D9E75"></span>Clinical ${c.raw.clinical}/10</span>
+        <span class="met"><span class="met-dot" style="background:#D85A30"></span>Research ${c.raw.research}/10</span>
+        <span class="met"><span class="met-dot" style="background:#639922"></span>Wellbeing ${c.raw.wellbeing}/10</span>
+        <span class="met"><span class="met-dot" style="background:#BA7517"></span>Bond freedom ${c.raw.bond}/10</span>
+      </div>
+      <button class="expand-btn" onclick="toggleExpand('${c.id}')"><i class="ti ti-chevron-down" aria-hidden="true"></i> View strategic notes</button>
+      <div class="expand-content" id="ex-${c.id}">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="detail-k">Est. closing AIR</div><div class="detail-v">${c.closingAIR}</div></div>
+          <div class="detail-item"><div class="detail-k">Bond obligation</div><div class="detail-v">${c.bond}</div></div>
+          <div class="detail-item"><div class="detail-k">Probability band</div><div class="detail-v">${c.probR}</div></div>
+          <div class="detail-item"><div class="detail-k">Weighted score</div><div class="detail-v">${sc.toFixed(2)} / 10</div></div>
+        </div>
+        <div class="strat-note">${c.strat}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function revealAll() {
+  revealed = true;
+  renderGrid();
+  updateSummaryChips();
+  setTimeout(() => {
+    colleges.forEach(c => {
+      const pf = document.getElementById('pf-'+c.id);
+      if(pf) pf.style.width = c.prob + '%';
+    });
+  }, 80);
+}
+
+function updateSummaryChips() {
+  const sc = document.getElementById('sum-chips');
+  const best = [...colleges].sort((a,b)=>calcScore(b)-calcScore(a))[0];
+  sc.innerHTML = `
+    <div class="s-chip">Score <b>${document.getElementById('f-score').value}/720</b></div>
+    <div class="s-chip">AIR <b>${document.getElementById('f-air').value}</b></div>
+    <div class="s-chip">Category <b>General UR · Karnataka domicile</b></div>
+    <div class="s-chip">Top strategic pick <b>${best.name}</b></div>`;
+}
+
+function flt(band, btn) {
+  document.querySelectorAll('.flt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(band==='all'?null:band);
+  setTimeout(() => {
+    colleges.forEach(c => {
+      const pf = document.getElementById('pf-'+c.id);
+      if(pf) pf.style.width = c.prob + '%';
+    });
+  }, 50);
+}
+
+function toggleExpand(id) {
+  const el = document.getElementById('ex-'+id);
+  const btn = el.previousElementSibling;
+  el.classList.toggle('open');
+  btn.innerHTML = el.classList.contains('open')
+    ? '<i class="ti ti-chevron-up" aria-hidden="true"></i> Hide notes'
+    : '<i class="ti ti-chevron-down" aria-hidden="true"></i> View strategic notes';
+}
+
+function buildList() {
+  const ul = document.getElementById('pref-ul');
+  ul.innerHTML = prefOrder.map((id,i) => {
+    const c = colleges.find(x=>x.id===id);
+    if(!c) return '';
+    return `<li class="pref-item" id="pi-${id}">
+      <div class="pref-rank">${i+1}</div>
+      <span class="pref-name">${c.name}</span>
+      <span class="pref-band badge ${bandClass(c.band)}">${c.band}</span>
+      <span class="pref-prob">${c.probR}</span>
+      <div class="pref-ctrls">
+        <button class="pctl" onclick="moveItem('${id}',-1)" ${i===0?'disabled':''} aria-label="Move up">↑</button>
+        <button class="pctl" onclick="moveItem('${id}',1)" ${i===prefOrder.length-1?'disabled':''} aria-label="Move down">↓</button>
+        <button class="pctl" onclick="removeItem('${id}')" aria-label="Remove" style="color:#A32D2D">×</button>
+      </div>
+    </li>`;
+  }).join('');
+}
+
+function moveItem(id, dir) {
+  const i = prefOrder.indexOf(id);
+  const j = i + dir;
+  if(j<0 || j>=prefOrder.length) return;
+  [prefOrder[i], prefOrder[j]] = [prefOrder[j], prefOrder[i]];
+  buildList();
+}
+
+function removeItem(id) {
+  prefOrder = prefOrder.filter(x=>x!==id);
+  buildList();
+}
+
+async function generateReport() {
+  const btn = document.getElementById('gen-btn');
+  const box = document.getElementById('ai-box');
+  const status = document.getElementById('ai-status');
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  box.style.display = 'block';
+  box.textContent = '';
+  status.style.display = 'block';
+  status.textContent = 'Analysing profile and preference list...';
+
+  const top3 = prefOrder.slice(0,3).map(id=>{ const c=colleges.find(x=>x.id===id); return c?`${c.name} (${c.band}, prob ${c.probR})`:''; }).join(', ');
+  const goals = Array.from(document.querySelectorAll('.gtag.sel')).map(b=>b.textContent).join(', ');
+  const wNorm = (() => {
+    const t = Object.values(weights).reduce((a,b)=>a+b,0);
+    return Object.keys(weights).map(k=>`${wLabels[k]}: ${(weights[k]/t*100).toFixed(0)}%`).join('; ');
+  })();
+
+  const prompt = `You are an expert NEET UG counselling strategist for Karnataka, India. Write a focused strategic counselling report for this candidate.
+
+CANDIDATE PROFILE:
+Name: ${document.getElementById('f-name').value}
+NEET 2026 Score: ${document.getElementById('f-score').value}/720
+Predicted AIR: ${document.getElementById('f-air').value}
+Category: General (UR)
+Karnataka Domicile: Yes — KEA 85% state quota eligible
+Budget: Government colleges only
+Long-term goals: ${goals}
+Location: ${document.getElementById('f-loc').value}
+
+PRIORITY WEIGHTS SET BY CANDIDATE:
+${wNorm}
+
+CURRENT TOP 3 PREFERENCES:
+1. ${prefOrder[0] ? colleges.find(x=>x.id===prefOrder[0])?.name : 'Not set'}
+2. ${prefOrder[1] ? colleges.find(x=>x.id===prefOrder[1])?.name : 'Not set'}
+3. ${prefOrder[2] ? colleges.find(x=>x.id===prefOrder[2])?.name : 'Not set'}
+
+Write a 400-450 word strategic report with these sections (use plain text, no markdown symbols, no bullet points, short paragraphs):
+
+STRATEGIC ASSESSMENT
+Evaluate whether her top 3 picks match her goals of PG, super-specialization, USMLE, and research. Identify the strongest alignment and any mismatch.
+
+COUNSELLING TACTICS
+Give 3 specific, actionable tactics for her rank band at Karnataka UR General counselling — about round strategy, mop-up rounds, and AIQ participation.
+
+CRITICAL WARNING
+One specific mistake she must avoid. Be direct and specific.
+
+HIDDEN OPPORTUNITY
+One non-obvious strategic opportunity she may be missing given her profile.
+
+Write in clear, direct, advisory language. No fluff. No bullet lists. Just sharp paragraphs.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(b=>b.text||'').join('') || 'Unable to generate report.';
+    status.textContent = 'Report ready.';
+    box.textContent = text;
+  } catch(e) {
+    status.textContent = 'Error generating report.';
+    box.textContent = 'Could not connect to Claude API. Please try again.';
+  }
+  btn.disabled = false;
+  btn.textContent = '⚡ Regenerate report';
+}
+
+buildSliders();
+</script>
