@@ -1,665 +1,1506 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NEET 2026 Counselling Intelligence Tool</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/tabler-icons.min.css">
 <style>
-  :root {
-    --bg: #ffffff;
-    --bg2: #f7f7f5;
-    --bg3: #f0f0ee;
-    --bg-info: #E6F1FB;
-    --bg-success: #EAF3DE;
-    --bg-warn: #FAEEDA;
-    --bg-danger: #FCEBEB;
-    --txt: #1a1a1a;
-    --txt2: #64635f;
-    --txt3: #9e9d9a;
-    --txt-info: #185FA5;
-    --txt-success: #3B6D11;
-    --txt-warn: #854F0B;
-    --txt-danger: #A32D2D;
-    --bdr: rgba(0,0,0,0.1);
-    --bdr-em: rgba(0,0,0,0.2);
-    --r: 8px;
-    --rl: 12px;
-    --blue: #378ADD;
-    --green: #639922;
-    --amber: #BA7517;
-    --red: #D85A30;
-    --navy: #185FA5;
+  :root{
+    --bg:#f4f5f3;
+    --card:#ffffff;
+    --card2:#fafaf8;
+    --line:rgba(27,31,35,.10);
+    --line2:rgba(27,31,35,.18);
+    --text:#171717;
+    --muted:#686763;
+    --muted2:#8b8a86;
+    --blue:#1e67c6;
+    --blue2:#dceafc;
+    --green:#2f7a1f;
+    --green2:#e8f4df;
+    --amber:#9a5d00;
+    --amber2:#f9edd3;
+    --red:#b23b2d;
+    --red2:#fde8e5;
+    --shadow:0 14px 40px rgba(24,39,75,.08);
+    --radius:18px;
+    --radius2:12px;
+    --radius3:10px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #f2f2ef; color: var(--txt); min-height: 100vh; }
-  .page { max-width: 820px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-  .header { margin-bottom: 1.5rem; }
-  .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .header h1 { font-size: 20px; font-weight: 600; color: var(--txt); }
-  .header p { font-size: 13px; color: var(--txt2); margin-top: 4px; }
-  .ver-badge { font-size: 11px; background: var(--bg-info); color: var(--txt-info); padding: 4px 10px; border-radius: var(--r); font-weight: 500; flex-shrink: 0; }
-  .steps { display: flex; background: var(--bg); border: 1px solid var(--bdr); border-radius: var(--rl); overflow: hidden; margin-bottom: 1.25rem; }
-  .step-btn { flex: 1; padding: 10px 4px; text-align: center; font-size: 11px; cursor: pointer; border: none; border-right: 1px solid var(--bdr); color: var(--txt2); background: transparent; font-family: inherit; transition: background 0.1s; line-height: 1.4; }
-  .step-btn:last-child { border-right: none; }
-  .step-btn.active { background: var(--bg-info); color: var(--txt-info); font-weight: 600; }
-  .step-btn.done { color: var(--txt-success); background: var(--bg-success); }
-  .card { background: var(--bg); border: 1px solid var(--bdr); border-radius: var(--rl); padding: 1.25rem; margin-bottom: 1rem; }
-  .sec { display: none; }
-  .sec.on { display: block; }
-  .sec-head { font-size: 15px; font-weight: 600; color: var(--txt); margin-bottom: 1rem; padding-bottom: 10px; border-bottom: 1px solid var(--bdr); display: flex; align-items: center; gap: 8px; }
-  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 1rem; }
-  .fg { display: flex; flex-direction: column; gap: 5px; }
-  .fl { font-size: 11px; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: 0.04em; }
-  .fi { font-size: 13px; height: 36px; border: 1px solid var(--bdr-em); border-radius: var(--r); padding: 0 10px; background: var(--bg); color: var(--txt); font-family: inherit; }
-  .fi:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
-  .goal-wrap { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-  .gtag { font-size: 12px; padding: 5px 11px; border-radius: var(--r); border: 1px solid var(--bdr-em); color: var(--txt2); cursor: pointer; background: transparent; font-family: inherit; transition: all 0.1s; }
-  .gtag.sel { background: var(--bg-info); color: var(--txt-info); border-color: var(--blue); }
-  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--bdr); }
-  .btn-back { background: transparent; border: 1px solid var(--bdr-em); border-radius: var(--r); padding: 9px 18px; font-size: 13px; cursor: pointer; color: var(--txt); font-family: inherit; }
-  .btn-back:hover { background: var(--bg2); }
-  .btn-next { background: var(--navy); border: none; border-radius: var(--r); padding: 9px 20px; font-size: 13px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 500; }
-  .btn-next:hover { background: #0C447C; }
-  .btn-next:disabled { background: #B5D4F4; cursor: not-allowed; }
-  .info-box { background: var(--bg2); border-radius: var(--r); padding: 10px 14px; font-size: 12px; color: var(--txt2); margin-top: 10px; line-height: 1.6; }
-  .info-box b { color: var(--txt); font-weight: 600; }
-  .info-box.blue { border-left: 3px solid var(--blue); }
-  .info-box.amber { border-left: 3px solid var(--amber); background: var(--bg-warn); }
-  .info-box.danger { border-left: 3px solid var(--red); background: var(--bg-danger); }
-  /* Weights */
-  .sl-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .sl-lbl { font-size: 13px; color: var(--txt); min-width: 190px; flex-shrink: 0; }
-  input[type=range] { flex: 1; height: 4px; }
-  .sl-val { font-size: 13px; font-weight: 600; min-width: 26px; text-align: right; color: var(--txt); }
-  .sl-pct { font-size: 11px; color: var(--txt3); min-width: 34px; text-align: right; }
-  .total-row { font-size: 11px; color: var(--txt2); padding: 8px 0; border-top: 1px solid var(--bdr); margin-top: 4px; line-height: 1.7; }
-  /* Filter row */
-  .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
-  .flt-btn { font-size: 11px; padding: 4px 10px; border: 1px solid var(--bdr-em); border-radius: var(--r); background: transparent; cursor: pointer; color: var(--txt2); font-family: inherit; }
-  .flt-btn.active { background: var(--bg-info); color: var(--txt-info); border-color: var(--blue); font-weight: 600; }
-  /* College cards */
-  .cgrid { display: grid; grid-template-columns: 1fr; gap: 8px; }
-  .ccard { background: var(--bg); border: 1px solid var(--bdr); border-radius: var(--rl); padding: 1rem 1.1rem; }
-  .ccard.strategic { border: 2px solid var(--blue); }
-  .ccard-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-  .cname { font-size: 14px; font-weight: 600; color: var(--txt); }
-  .cloc { font-size: 11px; color: var(--txt2); margin-top: 2px; }
-  .badge { font-size: 11px; padding: 3px 8px; border-radius: var(--r); font-weight: 600; flex-shrink: 0; }
-  .bd { background: var(--bg-info); color: var(--txt-info); }
-  .bs { background: var(--bg-warn); color: var(--txt-warn); }
-  .bst { background: var(--bg-success); color: var(--txt-success); }
-  .bsf { background: var(--bg3); color: var(--txt2); }
-  .prob-section { margin: 8px 0; }
-  .prob-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--txt2); margin-bottom: 4px; }
-  .prob-bg { background: var(--bg2); border-radius: 4px; height: 9px; overflow: hidden; }
-  .prob-fill { height: 9px; border-radius: 4px; width: 0; transition: width 1.4s cubic-bezier(0.25,1,0.5,1); }
-  .ws-box { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--bdr); }
-  .ws-label { font-size: 11px; color: var(--txt2); flex-shrink: 0; }
-  .ws-bar-bg { flex: 1; background: var(--bdr); border-radius: 3px; height: 5px; }
-  .ws-bar { height: 5px; border-radius: 3px; transition: width 0.8s ease; }
-  .ws-score { font-size: 13px; font-weight: 600; flex-shrink: 0; min-width: 44px; text-align: right; }
-  .metrics { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-  .met { font-size: 11px; color: var(--txt2); display: flex; align-items: center; gap: 4px; }
-  .met-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .expand-btn { font-size: 11px; color: var(--txt2); background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
-  .expand-btn:hover { color: var(--txt); }
-  .expand-content { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--bdr); }
-  .expand-content.open { display: block; }
-  .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin-bottom: 8px; }
-  .detail-item .dk { font-size: 11px; color: var(--txt2); }
-  .detail-item .dv { font-size: 12px; font-weight: 600; color: var(--txt); }
-  .strat-note { font-size: 12px; color: var(--txt2); line-height: 1.6; padding: 8px 10px; background: var(--bg2); border-radius: var(--r); }
-  /* Preference list */
-  .pref-list { list-style: none; }
-  .pref-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--bdr); border-radius: var(--r); margin-bottom: 6px; background: var(--bg); }
-  .pref-rank { width: 26px; height: 26px; border-radius: 50%; background: var(--bg-info); color: var(--txt-info); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .pref-name { flex: 1; font-size: 13px; color: var(--txt); }
-  .pref-prob { font-size: 11px; color: var(--txt2); min-width: 62px; text-align: right; flex-shrink: 0; }
-  .pref-ctrls { display: flex; gap: 4px; }
-  .pctl { background: none; border: 1px solid var(--bdr); border-radius: 4px; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--txt2); font-family: inherit; }
-  .pctl:hover { background: var(--bg2); }
-  .pctl:disabled { opacity: 0.3; cursor: default; }
-  .pctl.remove { color: var(--txt-danger); }
-  /* Summary chips */
-  .sum-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .s-chip { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r); padding: 5px 11px; font-size: 12px; color: var(--txt2); }
-  .s-chip b { color: var(--txt); font-weight: 600; }
-  /* AI section */
-  .apikey-row { display: flex; gap: 8px; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
-  .fi-key { font-size: 13px; height: 36px; border: 1px solid var(--bdr-em); border-radius: var(--r); padding: 0 10px; background: var(--bg); color: var(--txt); font-family: monospace; flex: 1; min-width: 200px; }
-  .fi-key:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
-  .ai-box { border: 1px solid var(--bdr); border-radius: var(--rl); padding: 1rem 1.25rem; min-height: 120px; font-size: 13px; color: var(--txt); line-height: 1.85; white-space: pre-wrap; display: none; background: var(--bg); }
-  /* Footer */
-  .footer { text-align: center; font-size: 11px; color: var(--txt3); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--bdr); }
-  @media (max-width: 600px) {
-    .sl-lbl { min-width: 140px; font-size: 12px; }
-    .step-btn { font-size: 10px; padding: 8px 2px; }
-    .header h1 { font-size: 17px; }
-    .pref-name { font-size: 12px; }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(30,103,198,.08), transparent 28%),
+      radial-gradient(circle at top right, rgba(47,122,31,.08), transparent 24%),
+      var(--bg);
+    color:var(--text);
+  }
+  a{color:var(--blue); text-decoration:none}
+  .wrap{
+    max-width:1280px;
+    margin:0 auto;
+    padding:22px 16px 40px;
+  }
+  .hero{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    align-items:flex-start;
+    margin-bottom:16px;
+  }
+  .hero h1{
+    margin:0;
+    font-size:28px;
+    line-height:1.15;
+    letter-spacing:-.02em;
+  }
+  .hero p{
+    margin:10px 0 0;
+    color:var(--muted);
+    max-width:860px;
+    line-height:1.65;
+    font-size:14px;
+  }
+  .badge-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:14px;
+  }
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 12px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(255,255,255,.72);
+    box-shadow:0 5px 18px rgba(27,31,35,.04);
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .chip strong{color:var(--text)}
+  .layout{
+    display:grid;
+    grid-template-columns: 360px 1fr;
+    gap:16px;
+    align-items:start;
+  }
+  .stack{
+    display:grid;
+    gap:16px;
+  }
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;
+    backdrop-filter: blur(10px);
+  }
+  .card h2{
+    margin:0 0 12px;
+    font-size:18px;
+    letter-spacing:-.01em;
+  }
+  .sub{
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+  }
+  .grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .grid3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .field label{
+    font-size:11px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;
+    height:40px;
+    border-radius:12px;
+    border:1px solid var(--line2);
+    background:#fff;
+    padding:0 12px;
+    font-size:14px;
+    color:var(--text);
+    outline:none;
+  }
+  .field textarea{
+    min-height:88px;
+    padding:10px 12px;
+    resize:vertical;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    border-color:rgba(30,103,198,.55);
+    box-shadow:0 0 0 4px rgba(30,103,198,.08);
+  }
+  .muted-note{
+    margin-top:10px;
+    font-size:12px;
+    line-height:1.6;
+    color:var(--muted);
+    background:var(--card2);
+    border:1px solid var(--line);
+    padding:12px;
+    border-radius:12px;
+  }
+  .metrics{
+    display:grid;
+    gap:10px;
+  }
+  .metric{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    padding:13px 14px;
+    background:linear-gradient(180deg, #fff, #fbfbfa);
+    border:1px solid var(--line);
+    border-radius:14px;
+  }
+  .metric .k{
+    color:var(--muted);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    font-weight:700;
+  }
+  .metric .v{
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:-.03em;
+  }
+  .metric .s{
+    color:var(--muted2);
+    font-size:12px;
+    margin-top:2px;
+    line-height:1.45;
+    text-align:right;
+  }
+  .bar{
+    margin-top:8px;
+    height:9px;
+    background:#eef1f4;
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .fill{
+    height:100%;
+    width:50%;
+    border-radius:999px;
+    transition:width .45s ease;
+  }
+  .fill.blue{background:linear-gradient(90deg, #2d7ff7, #4ba3ff)}
+  .fill.green{background:linear-gradient(90deg, #2f7a1f, #69b043)}
+  .fill.amber{background:linear-gradient(90deg, #c98910, #f0b94d)}
+  .fill.red{background:linear-gradient(90deg, #cf4b33, #f37d60)}
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+  }
+  button{
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font:inherit;
+  }
+  .btn{
+    padding:10px 14px;
+    background:var(--blue);
+    color:#fff;
+    font-weight:700;
+    box-shadow:0 10px 18px rgba(30,103,198,.16);
+  }
+  .btn.secondary{
+    background:#eef3fb;
+    color:var(--blue);
+    box-shadow:none;
+    border:1px solid rgba(30,103,198,.16);
+  }
+  .btn.good{
+    background:var(--green);
+    box-shadow:0 10px 18px rgba(47,122,31,.15);
+  }
+  .btn.warn{
+    background:var(--amber);
+    box-shadow:0 10px 18px rgba(154,93,0,.14);
+  }
+  .btn.danger{
+    background:var(--red);
+    box-shadow:0 10px 18px rgba(178,59,45,.14);
+  }
+  .btn:disabled{
+    cursor:not-allowed;
+    opacity:.52;
+    box-shadow:none;
+  }
+  .tabs{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .tab{
+    padding:9px 12px;
+    border:1px solid var(--line2);
+    background:#fff;
+    color:var(--muted);
+    font-weight:700;
+    font-size:12px;
+  }
+  .tab.active{
+    background:var(--blue2);
+    color:var(--blue);
+    border-color:rgba(30,103,198,.20);
+  }
+  .toggle-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:6px 0 12px;
+  }
+  .toggle{
+    padding:7px 11px;
+    border:1px solid var(--line2);
+    background:#fff;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:700;
+  }
+  .toggle.active{
+    background:var(--green2);
+    color:var(--green);
+    border-color:rgba(47,122,31,.18);
+  }
+  .section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:12px;
+  }
+  .section-title h3{
+    margin:0;
+    font-size:16px;
+    letter-spacing:-.01em;
+  }
+  .section-title p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.55;
+  }
+  .search-row{
+    display:grid;
+    grid-template-columns:1fr 160px 160px;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .college-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+  .college{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:16px;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .college.top{
+    border-color:rgba(30,103,198,.25);
+    box-shadow:0 8px 28px rgba(30,103,198,.08);
+  }
+  .college-head{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .college h4{
+    margin:0;
+    font-size:15px;
+    letter-spacing:-.01em;
+  }
+  .small{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.55;
+  }
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .tag{
+    font-size:11px;
+    color:var(--muted);
+    border:1px solid var(--line);
+    background:var(--card2);
+    padding:4px 8px;
+    border-radius:999px;
+  }
+  .tag.blue{background:var(--blue2); color:var(--blue); border-color:rgba(30,103,198,.15)}
+  .tag.green{background:var(--green2); color:var(--green); border-color:rgba(47,122,31,.15)}
+  .tag.amber{background:var(--amber2); color:var(--amber); border-color:rgba(154,93,0,.15)}
+  .tag.red{background:var(--red2); color:var(--red); border-color:rgba(178,59,45,.15)}
+  .scoreline{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+  }
+  .scoreline strong{
+    font-size:13px;
+  }
+  .mini{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+  }
+  .mini div{
+    background:var(--card2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:8px 9px;
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.35;
+  }
+  .mini b{
+    display:block;
+    color:var(--text);
+    font-size:12px;
+    margin-top:2px;
+  }
+  .college .actions{
+    margin-top:0;
+  }
+  .pref-list{
+    display:grid;
+    gap:8px;
+    margin:0;
+    padding:0;
+    list-style:none;
+  }
+  .pref-item{
+    display:grid;
+    grid-template-columns: 42px 1fr auto auto;
+    gap:10px;
+    align-items:center;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fff;
+  }
+  .rank-badge{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--blue2);
+    color:var(--blue);
+    font-weight:900;
+    font-size:12px;
+  }
+  .pref-main{
+    min-width:0;
+  }
+  .pref-main strong{
+    display:block;
+    font-size:14px;
+    margin-bottom:2px;
+  }
+  .pref-main span{
+    color:var(--muted);
+    font-size:12px;
+  }
+  .pref-buttons{
+    display:flex;
+    gap:6px;
+  }
+  .icon-btn{
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f1f4f9;
+    color:#3f4f69;
+    border:1px solid var(--line);
+    font-weight:900;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    border:1px solid transparent;
+  }
+  .pill.blue{background:var(--blue2); color:var(--blue); border-color:rgba(30,103,198,.16)}
+  .pill.green{background:var(--green2); color:var(--green); border-color:rgba(47,122,31,.16)}
+  .pill.amber{background:var(--amber2); color:var(--amber); border-color:rgba(154,93,0,.16)}
+  .pill.red{background:var(--red2); color:var(--red); border-color:rgba(178,59,45,.16)}
+  .info{
+    border-radius:14px;
+    border:1px solid var(--line);
+    padding:12px 14px;
+    background:linear-gradient(180deg, #fff, #fafafa);
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.65;
+  }
+  .info strong{color:var(--text)}
+  .info.blue{background:var(--blue2); color:#214f92; border-color:rgba(30,103,198,.16)}
+  .info.green{background:var(--green2); color:#21561d; border-color:rgba(47,122,31,.16)}
+  .info.amber{background:var(--amber2); color:#6d4502; border-color:rgba(154,93,0,.16)}
+  .info.red{background:var(--red2); color:#8f2d21; border-color:rgba(178,59,45,.16)}
+  .locked{
+    opacity:.72;
+    pointer-events:none;
+    filter:saturate(.9);
+  }
+  .locked-badge{
+    display:none;
+  }
+  .locked-on .locked-badge{
+    display:inline-flex;
+  }
+  .stacked{
+    display:grid;
+    gap:10px;
+  }
+  .strategy-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+  }
+  .strategy{
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+    background:#fff;
+  }
+  .strategy .top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .strategy h4{margin:0;font-size:14px}
+  .strategy .num{
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--card2);border:1px solid var(--line);font-size:12px;font-weight:800;
+  }
+  .strategy p{
+    margin:0;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .foot{
+    margin-top:16px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+  }
+  .split{
+    display:grid;
+    grid-template-columns: 1.3fr .95fr;
+    gap:16px;
+    margin-top:16px;
+  }
+  .rangebar{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    margin-top:8px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .range{
+    height:10px;
+    border-radius:999px;
+    background:#edf0f3;
+    overflow:hidden;
+    margin-top:8px;
+  }
+  .range .rfill{
+    height:100%;
+    width:58%;
+    border-radius:999px;
+    background:linear-gradient(90deg, #2f7a1f, #2d7ff7);
+  }
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .toolbar .btn{
+    padding:9px 12px;
+  }
+  .hidden{display:none !important;}
+  .toast{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    background:#111827;
+    color:#fff;
+    padding:12px 14px;
+    border-radius:14px;
+    box-shadow:0 16px 40px rgba(0,0,0,.24);
+    font-size:13px;
+    max-width:360px;
+    opacity:0;
+    transform:translateY(10px);
+    transition:.2s ease;
+    pointer-events:none;
+    z-index:20;
+  }
+  .toast.show{opacity:1;transform:translateY(0)}
+  @media (max-width:1100px){
+    .layout,.split{grid-template-columns:1fr}
+    .college-grid{grid-template-columns:1fr}
+    .strategy-grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:760px){
+    .hero h1{font-size:24px}
+    .grid2,.grid3,.search-row,.strategy-grid{grid-template-columns:1fr}
+    .pref-item{grid-template-columns:38px 1fr; }
+    .pref-buttons{grid-column:1 / -1; justify-content:flex-end}
+    .mini{grid-template-columns:1fr 1fr}
   }
 </style>
 </head>
 <body>
-<div class="page">
-
-  <div class="header">
-    <div class="header-top">
-      <div>
-        <h1><i class="ti ti-stethoscope" style="margin-right:8px;color:#185FA5"></i>NEET 2026 Counselling Intelligence Tool</h1>
-        <p>Karnataka government medical colleges · General (UR) · State quota + AIQ strategy</p>
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>NEET 2026 Counselling Intelligence Tool</h1>
+      <p>
+        A self-contained counselling planner for rank prediction, percentile estimation, choice filling, and choice locking.
+        It runs entirely in the browser — no Claude API, no external inference dependency.
+      </p>
+      <div class="badge-row">
+        <span class="chip"><strong>Mode:</strong> Karnataka counselling + MCC style workflow</span>
+        <span class="chip"><strong>Locking:</strong> Save draft → final lock → unlock with confirmation</span>
+        <span class="chip"><strong>Prediction:</strong> Score → AIR range → percentile estimate</span>
       </div>
-      <span class="ver-badge">v1.0 · Karnataka domicile</span>
     </div>
+    <div class="chip locked-badge"><strong>LOCKED</strong> Choice list frozen for this round</div>
   </div>
 
-  <div class="steps">
-    <button class="step-btn active" id="s0" onclick="go(0)">① Profile</button>
-    <button class="step-btn" id="s1" onclick="go(1)">② Priorities</button>
-    <button class="step-btn" id="s2" onclick="go(2)">③ Reveal</button>
-    <button class="step-btn" id="s3" onclick="go(3)">④ Build list</button>
-    <button class="step-btn" id="s4" onclick="go(4)">⑤ AI report</button>
-  </div>
-
-  <!-- SECTION 0: PROFILE -->
-  <div class="sec on card" id="sec0">
-    <div class="sec-head"><i class="ti ti-user-circle"></i> Confirm candidate profile</div>
-    <div class="form-row">
-      <div class="fg"><span class="fl">Candidate name</span><input class="fi" id="f-name" value="Arkamita"></div>
-      <div class="fg"><span class="fl">NEET 2026 score</span><input class="fi" id="f-score" type="number" min="1" max="720" value="682"></div>
-      <div class="fg"><span class="fl">Predicted AIR</span><input class="fi" id="f-air" value="3,601 – 3,800"></div>
-    </div>
-    <div class="form-row">
-      <div class="fg">
-        <span class="fl">Category</span>
-        <select class="fi" id="f-cat">
-          <option value="UR" selected>General (UR)</option>
-          <option value="OBC">OBC</option>
-          <option value="SC">SC</option>
-          <option value="ST">ST</option>
-          <option value="EWS">EWS</option>
-        </select>
+  <div class="layout">
+    <div class="stack">
+      <div class="card">
+        <h2>Candidate profile</h2>
+        <p class="sub">Use variables for candidate name, year, and attempt number. These feed the prediction card, counseling plan, and report.</p>
+        <div class="grid2">
+          <div class="field">
+            <label>Candidate name</label>
+            <input id="name" type="text" value="Arkamita" />
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <input id="year" type="number" value="2026" min="2024" max="2035" />
+          </div>
+          <div class="field">
+            <label>Attempt number</label>
+            <input id="attempt" type="number" value="1" min="1" max="12" />
+          </div>
+          <div class="field">
+            <label>NEET score</label>
+            <input id="score" type="number" value="682" min="1" max="720" />
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="field">
+            <label>Category</label>
+            <select id="category">
+              <option value="UR" selected>General / UR</option>
+              <option value="OBC">OBC</option>
+              <option value="EWS">EWS</option>
+              <option value="SC">SC</option>
+              <option value="ST">ST</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Domicile</label>
+            <select id="domicile">
+              <option value="KA" selected>Karnataka domicile</option>
+              <option value="AIQ">AIQ only</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="field">
+            <label>Budget posture</label>
+            <select id="budget">
+              <option value="govt" selected>Government preferred</option>
+              <option value="mixed">Government + selective private</option>
+              <option value="open">Budget flexible</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Primary pathway</label>
+            <select id="pathway">
+              <option value="pg" selected>PG / MD-MS in India</option>
+              <option value="usmle">USMLE / abroad</option>
+              <option value="research">Research / academia</option>
+              <option value="practice">Private practice</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label>Location preference</label>
+          <select id="location">
+            <option value="any" selected>Open across Karnataka</option>
+            <option value="blr">Bengaluru preferred</option>
+            <option value="mys">Mysuru preferred</option>
+            <option value="tier2">Tier-2 acceptable</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn secondary" id="saveDraft">Save draft</button>
+          <button class="btn good" id="autoFill">Auto-build preference list</button>
+        </div>
+        <div class="muted-note">
+          <strong>Important:</strong> the score-to-rank and score-to-percentile logic here is heuristic and intended for strategy, not official forecasting. Use the official counselling portal for final eligibility and seat allotment.
+        </div>
       </div>
-      <div class="fg">
-        <span class="fl">Karnataka domicile</span>
-        <select class="fi" id="f-dom">
-          <option value="yes" selected>Yes — KEA 85% state quota eligible</option>
-          <option value="no">No — AIQ only</option>
-        </select>
-      </div>
-      <div class="fg">
-        <span class="fl">Budget</span>
-        <select class="fi" id="f-bud">
-          <option value="govt" selected>Government only (budget critical)</option>
-          <option value="some">Up to ₹15–20L/year</option>
-          <option value="open">Cost not a constraint</option>
-        </select>
-      </div>
-    </div>
-    <div class="fg" style="margin-bottom:1rem">
-      <span class="fl">Long-term goals (select all that apply)</span>
-      <div class="goal-wrap" id="goal-wrap">
-        <button class="gtag sel" data-g="pg">PG / MD / MS in India</button>
-        <button class="gtag sel" data-g="superspec">Super-specialization</button>
-        <button class="gtag sel" data-g="usmle">USMLE / abroad</button>
-        <button class="gtag sel" data-g="research">Research / academia</button>
-        <button class="gtag" data-g="practice">Private practice</button>
-        <button class="gtag" data-g="service">Govt service</button>
-      </div>
-    </div>
-    <div class="fg">
-      <span class="fl">Location preference</span>
-      <select class="fi" id="f-loc" style="max-width:320px">
-        <option value="any" selected>Open to all Karnataka</option>
-        <option value="blr">Bengaluru strongly preferred</option>
-        <option value="mys">Mysuru preferred</option>
-        <option value="t2">Tier-2 cities acceptable</option>
-      </select>
-    </div>
-    <div class="info-box blue" style="margin-top:12px">
-      <b>Karnataka domicile confirmed.</b> KEA 85% state quota probabilities applied — significantly higher than AIQ-only estimates. Participate in MCC AIQ counselling simultaneously for additional opportunities.
-    </div>
-    <div class="nav-row">
-      <span style="font-size:12px;color:var(--txt2)">Step 1 of 5</span>
-      <button class="btn-next" onclick="go(1)">Next: set priorities →</button>
-    </div>
-  </div>
 
-  <!-- SECTION 1: PRIORITY WEIGHTS -->
-  <div class="sec card" id="sec1">
-    <div class="sec-head"><i class="ti ti-adjustments-horizontal"></i> Adjust priority weights</div>
-    <p style="font-size:12px;color:var(--txt2);margin-bottom:1rem">Move sliders to reflect real priorities. Weights normalise to 100% automatically. Probabilities recalculate live when you reveal results.</p>
-    <div id="sl-container"></div>
-    <div class="total-row" id="total-row"></div>
-    <div class="info-box blue" style="margin-top:10px">
-      <b>Tip for this profile:</b> With PG + USMLE + research goals, keep PG ecosystem and clinical exposure weights highest. Bond freedom is critical if USMLE or research pathways are the priority — ESIC Bangalore (central govt) scores 9/10 here with zero rural bond.
-    </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="go(0)">← Back</button>
-      <button class="btn-next" onclick="go(2);revealAll()">Reveal probabilities →</button>
-    </div>
-  </div>
-
-  <!-- SECTION 2: RESULTS -->
-  <div class="sec" id="sec2">
-    <div class="card">
-      <div class="sec-head"><i class="ti ti-chart-bar"></i> College probability matrix</div>
-      <div class="sum-chips" id="sum-chips"></div>
-      <div class="filter-row">
-        <span style="font-size:12px;color:var(--txt2)">Filter by band:</span>
-        <button class="flt-btn active" onclick="flt('all',this)">All colleges</button>
-        <button class="flt-btn" onclick="flt('Dream',this)">Dream</button>
-        <button class="flt-btn" onclick="flt('Stretch',this)">Stretch</button>
-        <button class="flt-btn" onclick="flt('Strong',this)">Strong</button>
-        <button class="flt-btn" onclick="flt('Safe',this)">Safe</button>
-      </div>
-      <div class="cgrid" id="cgrid"></div>
-      <div class="nav-row">
-        <button class="btn-back" onclick="go(1)">← Back</button>
-        <button class="btn-next" onclick="go(3);buildList()">Build my preference list →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION 3: PREFERENCE BUILDER -->
-  <div class="sec card" id="sec3">
-    <div class="sec-head"><i class="ti ti-list-numbers"></i> Counselling preference list — KEA / MCC form order</div>
-    <p style="font-size:12px;color:var(--txt2);margin-bottom:1rem">Use ↑ ↓ to reorder. The counselling algorithm honours your true preference — always put dream colleges first regardless of probability. Remove colleges you genuinely would not accept.</p>
-    <ul class="pref-list" id="pref-ul"></ul>
-    <div class="info-box amber" style="margin-top:10px">
-      <b>Critical rule:</b> Never order by probability alone. If a college is allotted and you don't want it, you risk losing all options below. Only list colleges you will genuinely accept at each position. Once locked, an allotment cannot be undone in that round.
-    </div>
-    <div class="nav-row">
-      <button class="btn-back" onclick="go(2)">← Back</button>
-      <button class="btn-next" onclick="go(4)">Get AI strategic report →</button>
-    </div>
-  </div>
-
-  <!-- SECTION 4: AI REPORT -->
-  <div class="sec card" id="sec4">
-    <div class="sec-head"><i class="ti ti-brain"></i> AI strategic counselling report</div>
-    <p style="font-size:12px;color:var(--txt2);margin-bottom:1rem">Generates a personalised analysis of your top choices, strategic risks, round-specific tactics, and hidden opportunities. Powered by Claude AI (Anthropic).</p>
-
-    <div class="info-box blue" style="margin-bottom:1rem">
-      <b>API key required.</b> Enter your Anthropic API key below to generate the report. Get one at <a href="https://console.anthropic.com" target="_blank" style="color:var(--txt-info)">console.anthropic.com</a> (free tier available). Your key is used only for this request and never stored.
-    </div>
-
-    <div class="apikey-row">
-      <div class="fg" style="flex:1">
-        <span class="fl">Anthropic API key</span>
-        <input class="fi-key" id="api-key" type="password" placeholder="sk-ant-...">
+      <div class="card">
+        <h2>Live rank prediction</h2>
+        <p class="sub">This estimate updates as the score changes. It is intentionally conservative to avoid false confidence.</p>
+        <div class="metrics">
+          <div class="metric">
+            <div>
+              <div class="k">Estimated AIR</div>
+              <div class="v" id="airText">3,600</div>
+              <div class="rangebar"><span id="airLow">Range: 3,200</span><span id="airHigh">4,300</span></div>
+            </div>
+            <div style="min-width:110px;text-align:right">
+              <div class="k">Confidence</div>
+              <div class="s" id="airConf">Moderate</div>
+            </div>
+          </div>
+          <div class="metric">
+            <div>
+              <div class="k">Estimated percentile</div>
+              <div class="v" id="pctText">99.85</div>
+              <div class="rangebar"><span id="pctLow">Low: 99.81</span><span id="pctHigh">High: 99.88</span></div>
+            </div>
+            <div style="min-width:110px;text-align:right">
+              <div class="k">Relative band</div>
+              <div class="s" id="pctBand">Top 0.2%</div>
+            </div>
+          </div>
+          <div class="metric">
+            <div>
+              <div class="k">Choice list state</div>
+              <div class="v" id="lockState">Draft</div>
+              <div class="rangebar"><span id="prefCount">0 choices</span><span id="saveState">Not locked</span></div>
+            </div>
+            <div style="min-width:110px;text-align:right">
+              <div class="k">Round plan</div>
+              <div class="s" id="roundSummary">Build list first</div>
+            </div>
+          </div>
+        </div>
+        <div class="bar"><div class="fill blue" id="probBar"></div></div>
       </div>
     </div>
 
-    <div id="ai-status" style="font-size:12px;color:var(--txt2);margin-bottom:10px;display:none"></div>
-    <div class="ai-box" id="ai-box"></div>
+    <div class="stack">
+      <div class="card">
+        <h2>Admission counselling strategy</h2>
+        <p class="sub">A NEET-style workflow: profile → choice building → saving → locking → round strategy. Once locked, the list behaves like a final submitted counselling set.</p>
 
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px">
-      <button class="btn-next" id="gen-btn" onclick="generateReport()"><i class="ti ti-sparkles" style="margin-right:6px"></i>Generate strategic report</button>
-      <span style="font-size:12px;color:var(--txt2)">Takes ~15 seconds · Uses claude-sonnet-4</span>
+        <div class="strategy-grid">
+          <div class="strategy">
+            <div class="top"><h4>Round 1</h4><div class="num">1</div></div>
+            <p>Fill every college you would genuinely accept. Do not filter only by probability. Keep dream colleges first, then strategic stretch options, then safe backups.</p>
+          </div>
+          <div class="strategy">
+            <div class="top"><h4>Round 2</h4><div class="num">2</div></div>
+            <p>Re-open only if the round movement changes your viable zone. Otherwise keep the order stable. Reordering after emotional panic is how good seats get wasted.</p>
+          </div>
+          <div class="strategy">
+            <div class="top"><h4>Mop-up</h4><div class="num">3</div></div>
+            <p>Add stronger backups, especially if you still need a seat. In mop-up, completeness matters more than elegance. Empty slots are self-sabotage.</p>
+          </div>
+          <div class="strategy">
+            <div class="top"><h4>Final lock</h4><div class="num">4</div></div>
+            <p>Lock only after verifying documents, category status, budget ceiling, and acceptable distance. Once locked, treat it as operationally final for the round.</p>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="info blue" id="strategyNote">
+            <strong>Strategy note:</strong> Build the list in true preference order, not probability order. The algorithm does not reward fear-based ranking. It rewards honest preference plus breadth.
+          </div>
+          <div class="info green" id="fitNote">
+            <strong>Fit note:</strong> The current profile is being interpreted as a Karnataka-domicile candidate with a high score band. That means government colleges should lead the list; private colleges become contingency options only if the budget is flexible.
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:12px">
+          <button class="btn" id="lockBtn">Lock choices</button>
+          <button class="btn secondary" id="unlockBtn">Unlock</button>
+          <button class="btn secondary" id="clearBtn">Clear list</button>
+          <button class="btn warn" id="simulateBtn">Simulate allotment</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <div>
+            <h3>College bank</h3>
+            <p>Search, filter, and add institutions to the preference list. Built to mimic the workflow of counseling choice filling.</p>
+          </div>
+          <div class="pill blue" id="bankCount">0 institutions</div>
+        </div>
+        <div class="search-row">
+          <div class="field" style="margin:0">
+            <label>Search</label>
+            <input id="search" type="text" placeholder="Search college, city, tag" />
+          </div>
+          <div class="field" style="margin:0">
+            <label>Type</label>
+            <select id="typeFilter">
+              <option value="all" selected>All</option>
+              <option value="Govt">Government</option>
+              <option value="Private">Private</option>
+            </select>
+          </div>
+          <div class="field" style="margin:0">
+            <label>Band</label>
+            <select id="bandFilter">
+              <option value="all" selected>All</option>
+              <option value="Dream">Dream</option>
+              <option value="Stretch">Stretch</option>
+              <option value="Strong">Strong</option>
+              <option value="Safe">Safe</option>
+            </select>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <button class="toggle active" data-preset="balanced">Balanced</button>
+          <button class="toggle" data-preset="pg">PG heavy</button>
+          <button class="toggle" data-preset="usmle">USMLE heavy</button>
+          <button class="toggle" data-preset="budget">Budget first</button>
+          <button class="toggle" data-preset="research">Research heavy</button>
+        </div>
+        <div class="college-grid" id="collegeGrid"></div>
+      </div>
+
+      <div class="card" id="prefCard">
+        <div class="section-title">
+          <div>
+            <h3>Choice filling list</h3>
+            <p>Your order should mirror real acceptance logic. Save the draft often. Lock only when the order is final.</p>
+          </div>
+          <div class="toolbar">
+            <span class="pill amber" id="draftPill">Draft mode</span>
+            <span class="pill red hidden" id="lockedPill">Locked</span>
+          </div>
+        </div>
+        <ol class="pref-list" id="prefList"></ol>
+        <div class="actions">
+          <button class="btn secondary" id="sortScoreBtn">Sort by strategic score</button>
+          <button class="btn secondary" id="sortChanceBtn">Sort by admission chance</button>
+          <button class="btn secondary" id="sortAirBtn">Sort by cutoff AIR</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Round-aware guidance</h2>
+        <p class="sub">The tool generates a local report without external AI calls. It uses the profile, score estimate, and preference order.</p>
+        <div class="info" id="reportBox">
+          Build a preference list, then press <strong>Simulate allotment</strong>. The report will show the likely round strategy, risk points, and the best use of the lock mechanism.
+        </div>
+        <div class="foot">
+          This file is fully self-contained. There are no external model calls and no hidden dependency on Anthropic, Claude, or any API key.
+        </div>
+      </div>
     </div>
-
-    <div class="info-box danger" style="margin-top:12px">
-      <b>Disclaimer:</b> All probability estimates are based on 2024–25 KEA state quota closing rank trends and are indicative only. Actual cutoffs depend on 2026 seat matrix, total applicants, and normalization. Always verify with official KEA and MCC portals before finalising choices.
-    </div>
-
-    <div class="nav-row">
-      <button class="btn-back" onclick="go(3)">← Back</button>
-      <button class="btn-back" onclick="window.print()"><i class="ti ti-printer" style="margin-right:4px"></i>Print / save as PDF</button>
-    </div>
-  </div>
-
-  <div class="footer">
-    NEET 2026 Counselling Intelligence Tool · Karnataka Government Medical Colleges · General (UR) ·
-    Data based on 2024–25 KEA counselling trends · Always verify with official KEA / MCC portals ·
-    Built with Claude AI by Anthropic
   </div>
 </div>
 
-<script>
-const weights = { pg:20, clinical:18, probability:15, research:12, academic:10, wellbeing:8, safety:7, bond:5, city:5 };
-const wLabels = {
-  pg:'PG ecosystem', clinical:'Clinical exposure', probability:'Admission probability',
-  research:'Research culture', academic:'Academic rigour', wellbeing:'Wellbeing / culture',
-  safety:'Safety & hostel', bond:'Bond freedom', city:'City ecosystem'
-};
+<div class="toast" id="toast"></div>
 
-const colleges = [
-  { id:'bmcri', name:'BMCRI, Bangalore', loc:'Bengaluru', band:'Dream', prob:27, probR:'22–32%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~1,800–2,800 (state quota est.)',
-    strat:'Highest clinical load in Karnataka. Elite peer group. Top PG and super-specialization output nationally. Fill as preference #1 regardless of probability — you cannot be allotted a seat you did not list.',
-    raw:{ pg:9, clinical:10, probability:2, research:7, academic:9, wellbeing:5, safety:7, bond:6, city:10 } },
-  { id:'mmcri', name:'MMCRI, Mysore', loc:'Mysuru', band:'Stretch', prob:50, probR:'44–56%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~2,500–4,500 (state quota est.)',
-    strat:'Karnataka\'s second strongest government medical institution historically. Strong PG culture and clinical load. More manageable stress environment than BMCRI. Realistic in Round 2 and mop-up rounds at this rank band.',
-    raw:{ pg:8, clinical:8, probability:4, research:7, academic:8, wellbeing:7, safety:8, bond:6, city:7 } },
-  { id:'esic', name:'ESIC, Bangalore', loc:'Bengaluru', band:'Stretch', prob:60, probR:'53–67%',
-    bond:'None — central govt, no rural bond obligation', closingAIR:'~3,000–5,500 (est.)',
-    strat:'Strategic sweet spot for a USMLE + research profile. Central govt hospital means zero rural bond obligation. Bengaluru location gives access to USMLE coaching centres, national professional networks, and hospital rotations. Growing research culture and infrastructure.',
-    raw:{ pg:6, clinical:7, probability:6, research:6, academic:7, wellbeing:8, safety:8, bond:9, city:9 } },
-  { id:'kims', name:'KIMS, Hubballi', loc:'Hubballi', band:'Strong', prob:66, probR:'60–72%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~4,000–7,000 (est.)',
-    strat:'One of the better-resourced government medical colleges outside Bengaluru. Strong clinical load, decent PG ecosystem. Good strategic pick if Bengaluru colleges do not materialise.',
-    raw:{ pg:7, clinical:8, probability:6, research:5, academic:7, wellbeing:7, safety:7, bond:6, city:6 } },
-  { id:'jjm', name:'JJM MC, Davangere', loc:'Davangere', band:'Strong', prob:72, probR:'66–78%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~5,000–9,000 (est.)',
-    strat:'Established central Karnataka government college. Good patient flow and clinical exposure. Strong enough to build a competitive NEET-PG foundation from.',
-    raw:{ pg:6, clinical:7, probability:7, research:4, academic:6, wellbeing:7, safety:7, bond:7, city:5 } },
-  { id:'bims', name:'BIMS, Belagavi', loc:'Belagavi', band:'Strong', prob:70, probR:'63–76%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~5,000–9,000 (est.)',
-    strat:'Established institution with good clinical exposure. Border location offers a unique patient profile from Maharashtra and Goa. Viable strategic pick in the mid-list.',
-    raw:{ pg:6, clinical:7, probability:7, research:4, academic:6, wellbeing:7, safety:6, bond:6, city:5 } },
-  { id:'sims', name:'SIMS, Shimoga', loc:'Shivamogga', band:'Strong', prob:82, probR:'76–86%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~7,000–12,000 (est.)',
-    strat:'Good wellbeing reputation and manageable academic environment. Consistent patient load. Lower burnout than metro institutions allowing stronger NEET-PG study discipline. Often underestimated.',
-    raw:{ pg:5, clinical:6, probability:8, research:4, academic:6, wellbeing:8, safety:7, bond:7, city:5 } },
-  { id:'vims', name:'VIMS, Ballari', loc:'Ballari', band:'Safe', prob:85, probR:'80–90%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~8,000–14,000 (est.)',
-    strat:'Higher clinical exposure than its tier suggests due to large patient catchment area. Safe pick with reasonable clinical training. Include in mid-lower list.',
-    raw:{ pg:5, clinical:7, probability:8, research:3, academic:5, wellbeing:6, safety:6, bond:6, city:4 } },
-  { id:'hassan', name:'Hassan IMC', loc:'Hassan', band:'Safe', prob:90, probR:'85–93%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~10,000–18,000 (est.)',
-    strat:'Near-certain allotment at this rank. Stable academic environment, good wellbeing scores. Place in the safety tier. Do not anchor the strategy here but ensure it is listed.',
-    raw:{ pg:4, clinical:5, probability:9, research:3, academic:5, wellbeing:8, safety:7, bond:6, city:4 } },
-  { id:'mandya', name:'Mandya IMC', loc:'Mandya', band:'Safe', prob:90, probR:'85–93%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~10,000–18,000 (est.)',
-    strat:'Proximity to Bengaluru is a practical advantage for weekend study and specialist access. Manageable environment. Place as a reliable safety net in the preference list.',
-    raw:{ pg:4, clinical:5, probability:9, research:3, academic:5, wellbeing:8, safety:7, bond:6, city:4 } },
-  { id:'kodagu', name:'Kodagu IMC', loc:'Madikeri', band:'Safe', prob:92, probR:'88–95%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~12,000–20,000 (est.)',
-    strat:'Pleasant environment with lower academic pressure. Include as a backup option. Clinical exposure is limited — not ideal as a primary choice for research or USMLE pathways.',
-    raw:{ pg:3, clinical:4, probability:9, research:2, academic:5, wellbeing:9, safety:8, bond:6, city:3 } },
-  { id:'raichur', name:'Raichur IMC', loc:'Raichur', band:'Safe', prob:93, probR:'88–96%',
-    bond:'Yes — rural posting (state govt)', closingAIR:'~12,000–20,000 (est.)',
-    strat:'Last resort option. Remote location limits ecosystem for research or USMLE pathways. List at the bottom of the preference sheet — no seat should go unfilled.',
-    raw:{ pg:3, clinical:4, probability:9, research:2, academic:4, wellbeing:6, safety:6, bond:6, city:3 } },
+<script>
+const collegeBank = [
+  {id:'bmcri', name:'BMCRI, Bengaluru', city:'Bengaluru', type:'Govt', band:'Dream', cutoff:2500, chance:24, score:9.4, tags:['elite clinical','PG powerhouse','metro'], row:{pg:10, clinical:10, research:7, infra:8, safety:7, bond:6, cost:10, wellbeing:5, city:10}},
+  {id:'mmcri', name:'MMCRI, Mysuru', city:'Mysuru', type:'Govt', band:'Stretch', cutoff:4200, chance:52, score:8.5, tags:['historic','strong academics','balanced'], row:{pg:9, clinical:9, research:7, infra:8, safety:8, bond:6, cost:10, wellbeing:7, city:7}},
+  {id:'esic', name:'ESIC, Bengaluru', city:'Bengaluru', type:'Govt', band:'Stretch', cutoff:5200, chance:59, score:8.1, tags:['bond-free','central govt','USMLE-friendly'], row:{pg:7, clinical:8, research:7, infra:8, safety:8, bond:10, cost:9, wellbeing:8, city:9}},
+  {id:'kims', name:'KIMS, Hubballi', city:'Hubballi', type:'Govt', band:'Strong', cutoff:6800, chance:68, score:7.7, tags:['high patient load','steady','reliable'], row:{pg:8, clinical:9, research:5, infra:7, safety:7, bond:6, cost:10, wellbeing:7, city:6}},
+  {id:'bims', name:'BIMS, Belagavi', city:'Belagavi', type:'Govt', band:'Strong', cutoff:8200, chance:72, score:7.3, tags:['border catchment','clinical exposure','stable'], row:{pg:7, clinical:8, research:5, infra:7, safety:7, bond:6, cost:10, wellbeing:7, city:5}},
+  {id:'jjm', name:'JJM MC, Davangere', city:'Davangere', type:'Govt', band:'Strong', cutoff:9000, chance:75, score:7.0, tags:['central Karnataka','good load','practical'], row:{pg:7, clinical:8, research:4, infra:6, safety:7, bond:7, cost:10, wellbeing:7, city:5}},
+  {id:'sims', name:'SIMS, Shivamogga', city:'Shivamogga', type:'Govt', band:'Strong', cutoff:11000, chance:83, score:6.8, tags:['good balance','less toxic','study room'], row:{pg:6, clinical:7, research:4, infra:6, safety:8, bond:7, cost:10, wellbeing:8, city:5}},
+  {id:'vims', name:'VIMS, Ballari', city:'Ballari', type:'Govt', band:'Safe', cutoff:13500, chance:86, score:6.4, tags:['large catchment','safe backup','practical'], row:{pg:6, clinical:7, research:3, infra:5, safety:6, bond:6, cost:10, wellbeing:6, city:4}},
+  {id:'hassan', name:'Hassan IMC', city:'Hassan', type:'Govt', band:'Safe', cutoff:16000, chance:90, score:6.0, tags:['stable','backup','comfortable'], row:{pg:5, clinical:6, research:3, infra:5, safety:7, bond:6, cost:10, wellbeing:8, city:4}},
+  {id:'mandya', name:'Mandya IMC', city:'Mandya', type:'Govt', band:'Safe', cutoff:16200, chance:91, score:6.0, tags:['near Bengaluru','study access','backup'], row:{pg:5, clinical:6, research:3, infra:5, safety:7, bond:6, cost:10, wellbeing:8, city:5}},
+  {id:'kodagu', name:'Kodagu IMC', city:'Madikeri', type:'Govt', band:'Safe', cutoff:19000, chance:93, score:5.6, tags:['pleasant climate','lower stress','backup'], row:{pg:4, clinical:5, research:2, infra:5, safety:8, bond:6, cost:10, wellbeing:9, city:3}},
+  {id:'raichur', name:'Raichur IMC', city:'Raichur', type:'Govt', band:'Safe', cutoff:20000, chance:94, score:5.4, tags:['remote','last resort','seat security'], row:{pg:4, clinical:5, research:2, infra:4, safety:6, bond:6, cost:10, wellbeing:6, city:3}},
+  {id:'jss', name:'JSS Medical College', city:'Mysuru', type:'Private', band:'Stretch', cutoff:12000, chance:58, score:7.9, tags:['premium private','strong brand','fee heavy'], row:{pg:8, clinical:8, research:6, infra:9, safety:8, bond:9, cost:3, wellbeing:7, city:7}},
+  {id:'ramaiah', name:'MS Ramaiah Medical College', city:'Bengaluru', type:'Private', band:'Stretch', cutoff:14000, chance:55, score:7.8, tags:['metro','strong network','fee heavy'], row:{pg:8, clinical:8, research:7, infra:9, safety:8, bond:9, cost:3, wellbeing:7, city:9}},
+  {id:'stjohns', name:'St. John\'s Medical College', city:'Bengaluru', type:'Private', band:'Stretch', cutoff:15000, chance:52, score:8.0, tags:['ethics','clinical','selective'], row:{pg:8, clinical:9, research:7, infra:8, safety:8, bond:9, cost:3, wellbeing:8, city:9}},
+  {id:'kmc', name:'KMC, Manipal', city:'Manipal', type:'Private', band:'Dream', cutoff:10000, chance:47, score:8.6, tags:['global brand','premium','research'], row:{pg:9, clinical:8, research:8, infra:10, safety:8, bond:9, cost:2, wellbeing:8, city:6}},
 ];
 
-let prefOrder = colleges.map(c => c.id);
-let revealed = false;
+const state = {
+  profile: {
+    name: 'Arkamita',
+    year: 2026,
+    attempt: 1,
+    score: 682,
+    category: 'UR',
+    domicile: 'KA',
+    budget: 'govt',
+    pathway: 'pg',
+    location: 'any'
+  },
+  filters: { search: '', type: 'all', band: 'all' },
+  locked: false,
+  preferences: [],
+  preset: 'balanced'
+};
 
-function go(n) {
-  document.querySelectorAll('.sec').forEach((s,i) => s.classList.toggle('on', i===n));
-  document.querySelectorAll('.step-btn').forEach((b,i) => {
-    b.classList.remove('active','done');
-    if(i===n) b.classList.add('active');
-    else if(i<n) b.classList.add('done');
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+const weights = {
+  pg: 20,
+  clinical: 20,
+  research: 10,
+  infra: 8,
+  safety: 10,
+  bond: 10,
+  cost: 12,
+  wellbeing: 5,
+  city: 5
+};
+
+const presets = {
+  balanced: { pg:20, clinical:20, research:10, infra:8, safety:10, bond:10, cost:12, wellbeing:5, city:5 },
+  pg:       { pg:28, clinical:18, research:8, infra:6, safety:8, bond:12, cost:10, wellbeing:5, city:5 },
+  usmle:    { pg:14, clinical:14, research:18, infra:12, safety:10, bond:18, cost:4, wellbeing:8, city:2 },
+  budget:   { pg:16, clinical:18, research:6, infra:6, safety:10, bond:10, cost:22, wellbeing:6, city:6 },
+  research: { pg:14, clinical:14, research:24, infra:10, safety:10, bond:10, cost:8, wellbeing:6, city:4 }
+};
+
+const labels = {
+  pg:'PG ecosystem',
+  clinical:'Clinical load',
+  research:'Research culture',
+  infra:'Infrastructure',
+  safety:'Safety / hostel',
+  bond:'Bond freedom',
+  cost:'Cost efficiency',
+  wellbeing:'Wellbeing',
+  city:'City ecosystem'
+};
+
+function fmt(n){ return Math.round(n).toLocaleString('en-IN'); }
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+function lerp(a,b,t){ return a+(b-a)*t; }
+
+function scoreToAIR(score){
+  const pts = [
+    [720, 1], [715, 35], [710, 110], [705, 280], [700, 700],
+    [695, 1200], [690, 2200], [685, 3200], [682, 3600], [680, 4300],
+    [675, 6200], [670, 8500], [665, 11500], [660, 15500], [650, 26000],
+    [640, 43000], [630, 68000], [620, 100000], [610, 145000], [600, 210000]
+  ];
+  if (score >= pts[0][0]) return 1;
+  if (score <= pts[pts.length-1][0]) {
+    const delta = 600 - score;
+    return Math.round(210000 * Math.exp(delta/35));
+  }
+  for(let i=0;i<pts.length-1;i++){
+    const [s1,a1] = pts[i];
+    const [s2,a2] = pts[i+1];
+    if(score <= s1 && score >= s2){
+      const t = (s1-score)/(s1-s2);
+      const v = Math.exp(lerp(Math.log(a1), Math.log(a2), t));
+      return Math.round(v);
+    }
+  }
+  return 3600;
 }
 
-document.querySelectorAll('.gtag').forEach(btn => {
-  btn.addEventListener('click', () => btn.classList.toggle('sel'));
+function scoreToPercentile(air){
+  const totalCandidates = 2400000;
+  const pct = 100 * (1 - air/totalCandidates);
+  return clamp(pct, 0, 99.999);
+}
+
+function percentileBand(p){
+  if (p >= 99.95) return 'Top 0.05%';
+  if (p >= 99.90) return 'Top 0.1%';
+  if (p >= 99.80) return 'Top 0.2%';
+  if (p >= 99.50) return 'Top 0.5%';
+  return 'Top 1%+';
+}
+
+function confidenceFromScore(score){
+  if(score >= 690) return 'High';
+  if(score >= 675) return 'Moderate';
+  return 'Low';
+}
+
+function scoreBand(score){
+  if(score >= 700) return 100;
+  if(score >= 680) return 88;
+  if(score >= 660) return 74;
+  if(score >= 640) return 60;
+  return 45;
+}
+
+function loadState(){
+  const raw = localStorage.getItem('neetCounsellingV2');
+  if(!raw) return;
+  try{
+    const obj = JSON.parse(raw);
+    if(obj.profile) Object.assign(state.profile, obj.profile);
+    if(Array.isArray(obj.preferences)) state.preferences = obj.preferences;
+    if(typeof obj.locked === 'boolean') state.locked = obj.locked;
+    if(obj.filters) Object.assign(state.filters, obj.filters);
+    if(obj.preset && presets[obj.preset]) applyPreset(obj.preset, false);
+  }catch(e){}
+}
+
+function saveState(){
+  localStorage.setItem('neetCounsellingV2', JSON.stringify({
+    profile: state.profile,
+    preferences: state.preferences,
+    locked: state.locked,
+    filters: state.filters,
+    preset: state.preset
+  }));
+}
+
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>el.classList.remove('show'), 2200);
+}
+
+function currentProfile(){
+  state.profile.name = document.getElementById('name').value.trim() || 'Candidate';
+  state.profile.year = parseInt(document.getElementById('year').value || '2026', 10);
+  state.profile.attempt = parseInt(document.getElementById('attempt').value || '1', 10);
+  state.profile.score = clamp(parseInt(document.getElementById('score').value || '0', 10), 1, 720);
+  state.profile.category = document.getElementById('category').value;
+  state.profile.domicile = document.getElementById('domicile').value;
+  state.profile.budget = document.getElementById('budget').value;
+  state.profile.pathway = document.getElementById('pathway').value;
+  state.profile.location = document.getElementById('location').value;
+  return state.profile;
+}
+
+function updatePrediction(){
+  const p = currentProfile();
+  const air = scoreToAIR(p.score);
+  const airLow = Math.round(air * 0.88);
+  const airHigh = Math.round(air * 1.20);
+  const pct = scoreToPercentile(air);
+  const pctLow = clamp(pct - 0.03, 0, 100);
+  const pctHigh = clamp(pct + 0.03, 0, 100);
+  const conf = confidenceFromScore(p.score);
+  document.getElementById('airText').textContent = fmt(air);
+  document.getElementById('airLow').textContent = 'Range: ' + fmt(airLow);
+  document.getElementById('airHigh').textContent = fmt(airHigh);
+  document.getElementById('airConf').textContent = conf;
+  document.getElementById('pctText').textContent = pct.toFixed(4);
+  document.getElementById('pctLow').textContent = 'Low: ' + pctLow.toFixed(4);
+  document.getElementById('pctHigh').textContent = 'High: ' + pctHigh.toFixed(4);
+  document.getElementById('pctBand').textContent = percentileBand(pct);
+  document.getElementById('probBar').style.width = scoreBand(p.score) + '%';
+  const round = p.score >= 680 ? 'Aggressive Govt + AIQ' : p.score >= 650 ? 'Balanced mixed list' : 'Safety-first';
+  document.getElementById('roundSummary').textContent = round;
+  document.getElementById('strategyNote').innerHTML =
+    '<strong>Strategy note:</strong> ' +
+    (p.domicile === 'KA'
+      ? 'Karnataka domicile is a structural advantage. Put government options first, then add only those private colleges you would truly pay for.'
+      : 'AIQ-only candidates should keep a more national mix and be extra careful with cutoff movement.');
+  document.getElementById('fitNote').innerHTML =
+    '<strong>Fit note:</strong> ' +
+    (p.pathway === 'usmle'
+      ? 'For USMLE, favour bond-free or metropolitan ecosystems, strong exposure, and enough time for exam prep.'
+      : p.pathway === 'research'
+      ? 'For research, prioritise institutions with stronger academics, infrastructure, and academic visibility.'
+      : 'For PG-heavy goals, prioritise clinical load, academic ecosystem, and peer competition.');
+  document.getElementById('saveState').textContent = state.locked ? 'Locked' : 'Saved locally';
+  document.getElementById('lockState').textContent = state.locked ? 'Locked' : 'Draft';
+  document.getElementById('prefCount').textContent = `${state.preferences.length} choices`;
+  updatePills();
+}
+
+function updatePills(){
+  const draft = document.getElementById('draftPill');
+  const locked = document.getElementById('lockedPill');
+  if(state.locked){
+    draft.textContent = 'Final lock saved';
+    draft.className = 'pill green';
+    locked.classList.remove('hidden');
+  }else{
+    draft.textContent = 'Draft mode';
+    draft.className = 'pill amber';
+    locked.classList.add('hidden');
+  }
+}
+
+function weightedScore(c){
+  const p = currentProfile();
+  const w = Object.fromEntries(Object.entries(weights));
+  const total = Object.values(w).reduce((a,b)=>a+b,0) || 1;
+  let row = c.row;
+  let s = 0;
+  for(const k of Object.keys(weights)) s += (row[k] || 0) * weights[k] / total;
+
+  // Fit adjustments
+  if(p.budget === 'govt' && c.type === 'Govt') s += 0.8;
+  if(p.budget === 'govt' && c.type === 'Private') s -= 1.0;
+  if(p.budget === 'open' && c.type === 'Private') s += 0.4;
+  if(p.pathway === 'usmle' && c.city === 'Bengaluru') s += 0.35;
+  if(p.pathway === 'research' && c.row.research >= 7) s += 0.4;
+  if(p.location === 'blr' && c.city === 'Bengaluru') s += 0.6;
+  if(p.location === 'mys' && c.city === 'Mysuru') s += 0.6;
+  if(p.location === 'tier2' && c.type === 'Govt') s += 0.15;
+  if(p.domicile === 'AIQ' && c.type === 'Private') s += 0.2;
+  return s;
+}
+
+function chanceAdjusted(c){
+  const p = currentProfile();
+  const air = scoreToAIR(p.score);
+  const base = c.cutoff;
+  // A smooth probability approximation around the estimated cutoff.
+  let x = (base - air) / base;
+  let chance = 100 / (1 + Math.exp(-10 * x));
+  if(p.budget === 'govt' && c.type === 'Govt') chance += 4;
+  if(p.budget === 'govt' && c.type === 'Private') chance -= 8;
+  if(p.pathway === 'usmle' && c.type === 'Private') chance += 2;
+  if(p.location === 'blr' && c.city === 'Bengaluru') chance += 2;
+  if(p.location === 'mys' && c.city === 'Mysuru') chance += 2;
+  return clamp(chance, 3, 98);
+}
+
+function bandForChance(ch){
+  if(ch >= 76) return 'Safe';
+  if(ch >= 56) return 'Strong';
+  if(ch >= 36) return 'Stretch';
+  return 'Dream';
+}
+
+function colorForBand(b){
+  if(b==='Dream') return 'red';
+  if(b==='Stretch') return 'amber';
+  if(b==='Strong') return 'green';
+  return 'blue';
+}
+
+function filteredBank(){
+  const s = state.filters.search.toLowerCase().trim();
+  return collegeBank.filter(c => {
+    const hit = !s || [c.name,c.city,c.type,c.band,...c.tags].join(' ').toLowerCase().includes(s);
+    const typeOk = state.filters.type === 'all' || c.type === state.filters.type;
+    const bandOk = state.filters.band === 'all' || c.band === state.filters.band;
+    return hit && typeOk && bandOk;
+  }).sort((a,b)=>weightedScore(b)-weightedScore(a));
+}
+
+function renderBank(){
+  const items = filteredBank();
+  document.getElementById('bankCount').textContent = `${items.length} institutions`;
+  const grid = document.getElementById('collegeGrid');
+  grid.innerHTML = items.map(c => {
+    const chance = chanceAdjusted(c);
+    const band = bandForChance(chance);
+    const bandClass = colorForBand(band);
+    const ws = weightedScore(c);
+    const inPref = state.preferences.includes(c.id);
+    const top = ws >= 7.8 || c.band === 'Dream';
+    return `
+      <div class="college ${top ? 'top' : ''}">
+        <div class="college-head">
+          <div>
+            <h4>${c.name}</h4>
+            <div class="small">${c.city} · ${c.type} · Estimated cutoff AIR ~ ${fmt(c.cutoff)}</div>
+          </div>
+          <span class="pill ${bandClass}">${band}</span>
+        </div>
+        <div class="scoreline">
+          <span class="small">Admission chance</span>
+          <strong>${chance.toFixed(0)}%</strong>
+        </div>
+        <div class="bar"><div class="fill ${bandClass}" style="width:${chance}%;"></div></div>
+        <div class="mini">
+          <div>PG<b>${c.row.pg}/10</b></div>
+          <div>Clinical<b>${c.row.clinical}/10</b></div>
+          <div>Research<b>${c.row.research}/10</b></div>
+          <div>Cost fit<b>${c.row.cost}/10</b></div>
+        </div>
+        <div class="tags">
+          ${c.tags.map(t=>`<span class="tag ${t.includes('bond')?'blue':''}">${t}</span>`).join('')}
+        </div>
+        <div class="actions">
+          <button class="btn ${inPref ? 'secondary' : ''}" onclick="togglePreference('${c.id}')">${inPref ? 'In list' : 'Add to list'}</button>
+          <button class="btn secondary" onclick="moveToTop('${c.id}')">Pin to top</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderPref(){
+  const list = document.getElementById('prefList');
+  if(!state.preferences.length){
+    list.innerHTML = `<li class="info">No choices yet. Add institutions from the bank above or press <strong>Auto-build preference list</strong>.</li>`;
+    document.getElementById('prefCount').textContent = '0 choices';
+    return;
+  }
+  list.innerHTML = state.preferences.map((id,idx)=>{
+    const c = collegeBank.find(x => x.id === id);
+    if(!c) return '';
+    const ch = chanceAdjusted(c);
+    const ws = weightedScore(c);
+    const band = bandForChance(ch);
+    return `
+      <li class="pref-item ${state.locked ? 'locked' : ''}">
+        <div class="rank-badge">${idx+1}</div>
+        <div class="pref-main">
+          <strong>${c.name}</strong>
+          <span>${c.city} · ${c.type} · ${c.band} band · chance ${ch.toFixed(0)}% · strategic score ${ws.toFixed(2)}</span>
+        </div>
+        <div class="pill ${colorForBand(band)}">${band}</div>
+        <div class="pref-buttons">
+          <button class="icon-btn" onclick="movePref('${c.id}', -1)" ${state.locked || idx===0 ? 'disabled':''}>↑</button>
+          <button class="icon-btn" onclick="movePref('${c.id}', 1)" ${state.locked || idx===state.preferences.length-1 ? 'disabled':''}>↓</button>
+          <button class="icon-btn" onclick="removePref('${c.id}')" ${state.locked ? 'disabled':''}>×</button>
+        </div>
+      </li>
+    `;
+  }).join('');
+  document.getElementById('prefCount').textContent = `${state.preferences.length} choices`;
+}
+
+function togglePreference(id){
+  if(state.locked){ toast('Choices are locked. Unlock first to edit.'); return; }
+  const i = state.preferences.indexOf(id);
+  if(i >= 0){
+    state.preferences.splice(i,1);
+    toast('Removed from choice list.');
+  }else{
+    state.preferences.push(id);
+    toast('Added to choice list.');
+  }
+  saveState(); renderAll();
+}
+
+function moveToTop(id){
+  if(state.locked){ toast('Choices are locked. Unlock first to edit.'); return; }
+  const i = state.preferences.indexOf(id);
+  if(i < 0){
+    state.preferences.unshift(id);
+  }else if(i > 0){
+    state.preferences.splice(i,1);
+    state.preferences.unshift(id);
+  }
+  saveState(); renderAll();
+  toast('Pinned to top.');
+}
+
+function movePref(id, dir){
+  if(state.locked) return;
+  const i = state.preferences.indexOf(id);
+  const j = i + dir;
+  if(i < 0 || j < 0 || j >= state.preferences.length) return;
+  const t = state.preferences[i];
+  state.preferences[i] = state.preferences[j];
+  state.preferences[j] = t;
+  saveState(); renderAll();
+}
+
+function removePref(id){
+  if(state.locked){ toast('Unlock first to remove a choice.'); return; }
+  state.preferences = state.preferences.filter(x => x !== id);
+  saveState(); renderAll();
+}
+
+function clearList(){
+  if(state.locked){ toast('Unlock first to clear the list.'); return; }
+  if(!confirm('Clear all choices from the preference list?')) return;
+  state.preferences = [];
+  saveState(); renderAll();
+  toast('Preference list cleared.');
+}
+
+function applyPreset(presetName, syncButtons=true){
+  if(!presets[presetName]) return;
+  state.preset = presetName;
+  const p = presets[presetName];
+  for(const k of Object.keys(p)) weights[k] = p[k];
+  if(syncButtons){
+    document.querySelectorAll('.toggle').forEach(btn => btn.classList.toggle('active', btn.dataset.preset === presetName));
+    toast(`Preset loaded: ${presetName}`);
+  }
+  renderAll();
+}
+
+function autoBuild(){
+  if(state.locked){ toast('Unlock first to rebuild.'); return; }
+  const profile = currentProfile();
+  const sorted = [...collegeBank].sort((a,b)=>{
+    // strategic order: first by band logic, then weighted score, then admission chance if same.
+    const bandOrder = {Dream:0, Stretch:1, Strong:2, Safe:3};
+    const aBand = bandOrder[bandForChance(chanceAdjusted(a))];
+    const bBand = bandOrder[bandForChance(chanceAdjusted(b))];
+    if(aBand !== bBand) return aBand - bBand;
+    const ws = weightedScore(b) - weightedScore(a);
+    if(Math.abs(ws) > 0.03) return ws;
+    return chanceAdjusted(b) - chanceAdjusted(a);
+  });
+
+  const chosen = [];
+  const add = (c)=>{ if(!chosen.includes(c.id)) chosen.push(c.id); };
+
+  // Dream first, then stretch, then strong, then safe, while respecting user's likely budget.
+  sorted.forEach(c=>{
+    const ch = chanceAdjusted(c);
+    const band = bandForChance(ch);
+    if(profile.budget === 'govt' && c.type === 'Private') {
+      if(profile.pathway === 'usmle' || profile.budget === 'open') add(c);
+      return;
+    }
+    if(band === 'Dream') add(c);
+  });
+  sorted.forEach(c=>{
+    const ch = chanceAdjusted(c), band = bandForChance(ch);
+    if(band === 'Stretch') add(c);
+  });
+  sorted.forEach(c=>{
+    const ch = chanceAdjusted(c), band = bandForChance(ch);
+    if(band === 'Strong') add(c);
+  });
+  sorted.forEach(c=>{
+    const ch = chanceAdjusted(c), band = bandForChance(ch);
+    if(band === 'Safe') add(c);
+  });
+
+  // Guarantee fallback breadth
+  if(profile.budget !== 'govt') {
+    ['jss','ramaiah','stjohns','kmc'].forEach(id => { if(!chosen.includes(id)) chosen.push(id); });
+  }
+  state.preferences = chosen;
+  saveState();
+  renderAll();
+  toast('Preference list auto-built.');
+}
+
+function lockChoices(){
+  if(!state.preferences.length){ toast('Add some choices before locking.'); return; }
+  const p = currentProfile();
+  const code = prompt(`Type LOCK to finalise choices for ${p.name} (${p.year})`);
+  if(code !== 'LOCK') return;
+  state.locked = true;
+  saveState();
+  renderAll();
+  toast('Choices locked for this round.');
+}
+
+function unlockChoices(){
+  const code = prompt('Type UNLOCK to edit the list again');
+  if(code !== 'UNLOCK') return;
+  state.locked = false;
+  saveState();
+  renderAll();
+  toast('Choices unlocked.');
+}
+
+function simulateAllotment(){
+  const p = currentProfile();
+  if(!state.preferences.length){
+    document.getElementById('reportBox').innerHTML = 'No preference list exists yet. Add colleges first.';
+    return;
+  }
+  const air = scoreToAIR(p.score);
+  const r1 = findAllotment(air, 0.78);
+  const r2 = findAllotment(air, 0.64);
+  const mop = findAllotment(air, 0.48);
+  const likely = r1 || r2 || mop || collegeBank.find(c=>state.preferences.includes(c.id));
+  const topThree = state.preferences.slice(0,3).map((id,i)=>{
+    const c = collegeBank.find(x=>x.id===id);
+    if(!c) return '';
+    const ch = chanceAdjusted(c);
+    return `${i+1}. ${c.name} — ${bandForChance(ch)} (${ch.toFixed(0)}%)`;
+  }).filter(Boolean).join('<br>');
+  document.getElementById('reportBox').innerHTML = `
+    <strong>Simulated allotment:</strong> ${likely ? likely.name : 'No likely allotment found'}<br><br>
+    <strong>Round 1:</strong> ${r1 ? r1.name : 'no confident match'}<br>
+    <strong>Round 2:</strong> ${r2 ? r2.name : 'no confident match'}<br>
+    <strong>Mop-up:</strong> ${mop ? mop.name : 'no confident match'}<br><br>
+    <strong>Top three choices in the current list:</strong><br>${topThree}<br><br>
+    <strong>Interpretation:</strong> keep the list broad, but let the order reflect true desirability. If the candidate is close to a strong government seat, use Round 1 aggressively and preserve the same list into later rounds unless the eligibility universe changes.
+  `;
+  toast('Allotment simulation updated.');
+}
+
+function findAllotment(air, multiplier){
+  for(const id of state.preferences){
+    const c = collegeBank.find(x => x.id === id);
+    if(!c) continue;
+    const adjCutoff = c.cutoff * multiplier;
+    if(air <= adjCutoff) return c;
+  }
+  return null;
+}
+
+function sortPreferences(mode){
+  if(state.locked){ toast('Unlock first to sort.'); return; }
+  if(!state.preferences.length) return;
+  state.preferences.sort((a,b)=>{
+    const A = collegeBank.find(x=>x.id===a);
+    const B = collegeBank.find(x=>x.id===b);
+    if(!A || !B) return 0;
+    if(mode === 'score') return weightedScore(B)-weightedScore(A);
+    if(mode === 'chance') return chanceAdjusted(B)-chanceAdjusted(A);
+    if(mode === 'air') return A.cutoff - B.cutoff;
+    return 0;
+  });
+  saveState();
+  renderAll();
+  toast('Preference list sorted.');
+}
+
+function updateReport(){
+  const p = currentProfile();
+  const air = scoreToAIR(p.score);
+  const pct = scoreToPercentile(air);
+  const top5 = [...collegeBank].sort((a,b)=>weightedScore(b)-weightedScore(a)).slice(0,5);
+  const recommended = top5.map((c,i)=>`${i+1}. ${c.name}`).join('<br>');
+  const dream = collegeBank.filter(c => bandForChance(chanceAdjusted(c)) === 'Dream').map(c=>c.name).slice(0,3).join(', ') || 'None';
+  const safe = collegeBank.filter(c => bandForChance(chanceAdjusted(c)) === 'Safe').map(c=>c.name).slice(0,3).join(', ') || 'None';
+
+  document.getElementById('reportBox').innerHTML = `
+    <strong>Profile summary:</strong> ${p.name}, ${p.year}, attempt ${p.attempt}, score ${p.score}/720, AIR ≈ ${fmt(air)}, percentile ≈ ${pct.toFixed(4)}.<br><br>
+    <strong>Strategic read:</strong> ${p.domicile === 'KA' ? 'Karnataka domicile materially improves access to state quota options.' : 'AIQ-only access means the list should be more conservative and nationally diversified.'}<br><br>
+    <strong>Top weighted colleges:</strong><br>${recommended}<br><br>
+    <strong>Dream-zone colleges in current model:</strong> ${dream}<br>
+    <strong>Safe-zone backups in current model:</strong> ${safe}<br><br>
+    <strong>Choice-lock rule:</strong> lock only after the list contains every college you would accept. Do not rank by fear. Rank by preference, then protect the list with safety coverage below it.
+  `;
+}
+
+function renderAll(){
+  updatePrediction();
+  renderBank();
+  renderPref();
+  updateReport();
+  saveState();
+}
+
+function syncInputsFromState(){
+  document.getElementById('name').value = state.profile.name;
+  document.getElementById('year').value = state.profile.year;
+  document.getElementById('attempt').value = state.profile.attempt;
+  document.getElementById('score').value = state.profile.score;
+  document.getElementById('category').value = state.profile.category;
+  document.getElementById('domicile').value = state.profile.domicile;
+  document.getElementById('budget').value = state.profile.budget;
+  document.getElementById('pathway').value = state.profile.pathway;
+  document.getElementById('location').value = state.profile.location;
+  document.querySelectorAll('.toggle').forEach(btn => btn.classList.toggle('active', btn.dataset.preset === state.preset));
+}
+
+document.getElementById('saveDraft').addEventListener('click', ()=>{
+  currentProfile();
+  saveState();
+  renderAll();
+  toast('Draft saved locally.');
+});
+document.getElementById('autoFill').addEventListener('click', autoBuild);
+document.getElementById('lockBtn').addEventListener('click', lockChoices);
+document.getElementById('unlockBtn').addEventListener('click', unlockChoices);
+document.getElementById('clearBtn').addEventListener('click', clearList);
+document.getElementById('simulateBtn').addEventListener('click', simulateAllotment);
+document.getElementById('sortScoreBtn').addEventListener('click', ()=>sortPreferences('score'));
+document.getElementById('sortChanceBtn').addEventListener('click', ()=>sortPreferences('chance'));
+document.getElementById('sortAirBtn').addEventListener('click', ()=>sortPreferences('air'));
+
+document.getElementById('search').addEventListener('input', e => {
+  state.filters.search = e.target.value;
+  renderBank();
+});
+document.getElementById('typeFilter').addEventListener('change', e => {
+  state.filters.type = e.target.value;
+  renderBank();
+});
+document.getElementById('bandFilter').addEventListener('change', e => {
+  state.filters.band = e.target.value;
+  renderBank();
 });
 
-function buildSliders() {
-  const c = document.getElementById('sl-container');
-  c.innerHTML = Object.keys(weights).map(k => `
-    <div class="sl-row">
-      <span class="sl-lbl">${wLabels[k]}</span>
-      <input type="range" min="0" max="30" step="1" value="${weights[k]}" id="sl-${k}" oninput="updateWeight('${k}',this.value)">
-      <span class="sl-val" id="sv-${k}">${weights[k]}</span>
-      <span class="sl-pct" id="sp-${k}">${weights[k]}%</span>
-    </div>`).join('');
-  updateTotal();
-}
-
-function updateWeight(k, v) {
-  weights[k] = parseInt(v);
-  document.getElementById('sv-'+k).textContent = v;
-  updateTotal();
-  if(revealed) renderGrid();
-}
-
-function updateTotal() {
-  const total = Object.values(weights).reduce((a,b)=>a+b,0);
-  Object.keys(weights).forEach(k => {
-    const sp = document.getElementById('sp-'+k);
-    if(sp) sp.textContent = Math.round(weights[k]/total*100) + '%';
+document.querySelectorAll('.toggle').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    applyPreset(btn.dataset.preset);
   });
-  const r = document.getElementById('total-row');
-  if(r) r.textContent = 'Normalised: ' + Object.keys(weights).map(k =>
-    `${wLabels[k]}: ${Math.round(weights[k]/total*100)}%`).join(' · ');
+});
+
+['name','year','attempt','score','category','domicile','budget','pathway','location'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    currentProfile();
+    renderAll();
+  });
+  document.getElementById(id).addEventListener('change', ()=>{
+    currentProfile();
+    renderAll();
+  });
+});
+
+function init(){
+  loadState();
+  syncInputsFromState();
+  currentProfile();
+  renderAll();
 }
-
-function calcScore(c) {
-  const total = Object.values(weights).reduce((a,b)=>a+b,0);
-  return Object.keys(weights).reduce((sum,k) => sum + (c.raw[k]||0) * weights[k]/total, 0);
-}
-
-function probColor(p) {
-  if(p >= 75) return '#639922';
-  if(p >= 50) return '#BA7517';
-  return '#D85A30';
-}
-
-function bandClass(b) {
-  if(b==='Dream') return 'bd';
-  if(b==='Stretch') return 'bs';
-  if(b==='Strong') return 'bst';
-  return 'bsf';
-}
-
-function renderGrid(bandFilter) {
-  const f = bandFilter || 'all';
-  const shown = f==='all' ? colleges : colleges.filter(c=>c.band===f);
-  const maxScore = Math.max(...colleges.map(c=>calcScore(c)));
-  document.getElementById('cgrid').innerHTML = shown.map(c => {
-    const sc = calcScore(c);
-    const pct = (sc/maxScore*100).toFixed(0);
-    const isStrat = c.id === 'esic';
-    const scoreColor = sc>=6.5 ? '#3B6D11' : sc>=5.5 ? '#854F0B' : '#5F5E5A';
-    const barColor = sc>=6.5 ? '#639922' : sc>=5.5 ? '#BA7517' : '#888780';
-    return `<div class="ccard${isStrat?' strategic':''}">
-      <div class="ccard-top">
-        <div>
-          <div class="cname">${c.name}${isStrat?' <span style="font-size:11px;background:#E6F1FB;color:#185FA5;padding:2px 7px;border-radius:5px;margin-left:6px;font-weight:600">strategic pick</span>':''}</div>
-          <div class="cloc"><i class="ti ti-map-pin" style="font-size:12px;margin-right:2px"></i>${c.loc} &nbsp;·&nbsp; ${c.bond}</div>
-        </div>
-        <span class="badge ${bandClass(c.band)}">${c.band}</span>
-      </div>
-      <div class="prob-section">
-        <div class="prob-head">
-          <span>Admission probability (KEA state quota, Karnataka UR)</span>
-          <span style="font-weight:600;color:${probColor(c.prob)}">${c.probR}</span>
-        </div>
-        <div class="prob-bg"><div class="prob-fill" id="pf-${c.id}" style="background:${probColor(c.prob)}"></div></div>
-      </div>
-      <div class="ws-box">
-        <span class="ws-label">Weighted score</span>
-        <div class="ws-bar-bg"><div class="ws-bar" id="wb-${c.id}" style="background:${barColor};width:${pct}%"></div></div>
-        <span class="ws-score" style="color:${scoreColor}">${sc.toFixed(2)}/10</span>
-      </div>
-      <div class="metrics">
-        <span class="met"><span class="met-dot" style="background:#378ADD"></span>PG ${c.raw.pg}/10</span>
-        <span class="met"><span class="met-dot" style="background:#1D9E75"></span>Clinical ${c.raw.clinical}/10</span>
-        <span class="met"><span class="met-dot" style="background:#D85A30"></span>Research ${c.raw.research}/10</span>
-        <span class="met"><span class="met-dot" style="background:#639922"></span>Wellbeing ${c.raw.wellbeing}/10</span>
-        <span class="met"><span class="met-dot" style="background:#BA7517"></span>Bond freedom ${c.raw.bond}/10</span>
-      </div>
-      <button class="expand-btn" onclick="toggleExpand('${c.id}')">
-        <i class="ti ti-chevron-down" id="chv-${c.id}"></i> View strategic notes
-      </button>
-      <div class="expand-content" id="ex-${c.id}">
-        <div class="detail-grid">
-          <div class="detail-item"><div class="dk">Est. closing AIR</div><div class="dv">${c.closingAIR}</div></div>
-          <div class="detail-item"><div class="dk">Bond obligation</div><div class="dv">${c.bond}</div></div>
-          <div class="detail-item"><div class="dk">Probability range</div><div class="dv">${c.probR}</div></div>
-          <div class="detail-item"><div class="dk">Weighted score</div><div class="dv">${sc.toFixed(2)} / 10</div></div>
-        </div>
-        <div class="strat-note">${c.strat}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function revealAll() {
-  revealed = true;
-  renderGrid();
-  updateSummaryChips();
-  setTimeout(() => {
-    colleges.forEach(c => {
-      const pf = document.getElementById('pf-'+c.id);
-      if(pf) pf.style.width = c.prob + '%';
-    });
-  }, 80);
-}
-
-function updateSummaryChips() {
-  const best = [...colleges].sort((a,b) => calcScore(b)-calcScore(a))[0];
-  document.getElementById('sum-chips').innerHTML = `
-    <div class="s-chip">Score <b>${document.getElementById('f-score').value}/720</b></div>
-    <div class="s-chip">AIR <b>${document.getElementById('f-air').value}</b></div>
-    <div class="s-chip">Category <b>General UR · Karnataka domicile</b></div>
-    <div class="s-chip">Top pick by weighted score <b>${best.name}</b></div>`;
-}
-
-function flt(band, btn) {
-  document.querySelectorAll('.flt-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderGrid(band==='all' ? null : band);
-  setTimeout(() => {
-    colleges.forEach(c => {
-      const pf = document.getElementById('pf-'+c.id);
-      if(pf) pf.style.width = c.prob + '%';
-    });
-  }, 50);
-}
-
-function toggleExpand(id) {
-  const el = document.getElementById('ex-'+id);
-  const btn = el.previousElementSibling;
-  const chv = document.getElementById('chv-'+id);
-  el.classList.toggle('open');
-  if(el.classList.contains('open')) {
-    chv.className = 'ti ti-chevron-up';
-    btn.innerHTML = '<i class="ti ti-chevron-up" id="chv-'+id+'"></i> Hide notes';
-  } else {
-    btn.innerHTML = '<i class="ti ti-chevron-down" id="chv-'+id+'"></i> View strategic notes';
-  }
-}
-
-function buildList() {
-  const ul = document.getElementById('pref-ul');
-  ul.innerHTML = prefOrder.map((id,i) => {
-    const c = colleges.find(x => x.id===id);
-    if(!c) return '';
-    return `<li class="pref-item">
-      <div class="pref-rank">${i+1}</div>
-      <span class="pref-name">${c.name}</span>
-      <span class="badge ${bandClass(c.band)}" style="flex-shrink:0">${c.band}</span>
-      <span class="pref-prob">${c.probR}</span>
-      <div class="pref-ctrls">
-        <button class="pctl" onclick="moveItem('${id}',-1)" ${i===0?'disabled':''} title="Move up">↑</button>
-        <button class="pctl" onclick="moveItem('${id}',1)" ${i===prefOrder.length-1?'disabled':''} title="Move down">↓</button>
-        <button class="pctl remove" onclick="removeItem('${id}')" title="Remove">×</button>
-      </div>
-    </li>`;
-  }).join('');
-}
-
-function moveItem(id, dir) {
-  const i = prefOrder.indexOf(id);
-  const j = i + dir;
-  if(j<0 || j>=prefOrder.length) return;
-  [prefOrder[i], prefOrder[j]] = [prefOrder[j], prefOrder[i]];
-  buildList();
-}
-
-function removeItem(id) {
-  prefOrder = prefOrder.filter(x => x!==id);
-  buildList();
-}
-
-async function generateReport() {
-  const key = document.getElementById('api-key').value.trim();
-  if(!key) { alert('Please enter your Anthropic API key first.'); return; }
-  const btn = document.getElementById('gen-btn');
-  const box = document.getElementById('ai-box');
-  const status = document.getElementById('ai-status');
-  btn.disabled = true;
-  btn.textContent = 'Generating...';
-  box.style.display = 'block';
-  box.textContent = 'Analysing profile and building strategic report...';
-  status.style.display = 'block';
-  status.textContent = 'Connecting to Claude AI...';
-
-  const top3 = prefOrder.slice(0,3).map(id => {
-    const c = colleges.find(x=>x.id===id);
-    return c ? `${c.name} (${c.band}, probability ${c.probR})` : '';
-  }).filter(Boolean).join(', ');
-
-  const goals = Array.from(document.querySelectorAll('.gtag.sel')).map(b=>b.textContent).join(', ');
-
-  const total = Object.values(weights).reduce((a,b)=>a+b,0);
-  const wNorm = Object.keys(weights).map(k =>
-    `${wLabels[k]}: ${Math.round(weights[k]/total*100)}%`).join('; ');
-
-  const prompt = `You are an expert NEET UG counselling strategist for Karnataka, India. Write a focused strategic counselling report.
-
-CANDIDATE PROFILE:
-Name: ${document.getElementById('f-name').value}
-NEET 2026 Score: ${document.getElementById('f-score').value}/720
-Predicted AIR: ${document.getElementById('f-air').value}
-Category: General (UR)
-Karnataka Domicile: Yes — KEA 85% state quota eligible
-Budget: Government colleges only
-Long-term goals: ${goals}
-Location preference: ${document.getElementById('f-loc').value}
-
-PRIORITY WEIGHTS:
-${wNorm}
-
-CURRENT TOP 3 PREFERENCES:
-1. ${prefOrder[0] ? (colleges.find(x=>x.id===prefOrder[0])?.name||'') : 'Not set'}
-2. ${prefOrder[1] ? (colleges.find(x=>x.id===prefOrder[1])?.name||'') : 'Not set'}
-3. ${prefOrder[2] ? (colleges.find(x=>x.id===prefOrder[2])?.name||'') : 'Not set'}
-
-Write a 420-460 word strategic report with these four clearly labelled sections (plain text, no markdown symbols, no bullet points, short focused paragraphs):
-
-STRATEGIC ASSESSMENT
-Evaluate whether the top 3 picks align with PG, super-specialization, USMLE, and research goals. Identify the strongest alignment and any mismatch.
-
-COUNSELLING TACTICS
-Three specific, actionable tactics for this rank band at Karnataka UR General counselling — covering round strategy, mop-up rounds, and MCC AIQ participation.
-
-CRITICAL WARNING
-One specific mistake to avoid. Be direct and concrete.
-
-HIDDEN OPPORTUNITY
-One non-obvious strategic opportunity given this profile and rank.
-
-Write in clear, direct, advisor language. No fluff. Paragraphs only.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error.message);
-    const text = data.content?.map(b=>b.text||'').join('') || 'Unable to generate report.';
-    status.textContent = 'Report generated successfully.';
-    box.textContent = text;
-  } catch(e) {
-    status.textContent = 'Error: ' + e.message;
-    box.textContent = 'Could not connect to Claude API. Check that your API key is correct and try again.';
-  }
-  btn.disabled = false;
-  btn.textContent = '⚡ Regenerate report';
-}
-
-buildSliders();
+init();
 </script>
 </body>
 </html>
+Designed by Anirban Pal
